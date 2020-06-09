@@ -4,13 +4,8 @@ import React, { useState } from 'react';
 import {
     View,
     Text,
-    StatusBar,
     StyleSheet,
-    Dimensions,
-    Button,
     TouchableOpacity,
-    Alert
-
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
@@ -44,7 +39,7 @@ function SignInScreen({ navigation }) {
       else{
           
       }
-      Alert.alert('Đăng nhập thành công!')
+      // Alert.alert('Đăng nhập thành công!')
       navigation.navigate("Home");
   }
 

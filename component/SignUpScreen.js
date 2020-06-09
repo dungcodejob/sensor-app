@@ -2,15 +2,11 @@ import React, { useState } from 'react';
 import {
     View,
     Text,
-    StatusBar,
     StyleSheet,
-    Dimensions,
-    Button,
     TouchableOpacity
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
-
 import { TextInput } from "react-native-gesture-handler";
 
 
@@ -19,7 +15,6 @@ function SignUpScreen({ navigation }) {
     const [check_textInputChange, setCheck_textInputChange] = useState(false);
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
-    const [secureTextEntry, setSecureTextEntry] = useState("");
 
     const textInputChange = (value) => {
         if (value.length !== 0) {

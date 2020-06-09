@@ -1,10 +1,13 @@
 
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, CardStyleInterpolator, TransitionPresets } from '@react-navigation/stack';
 import SignInScreen from "./component/SignInScreen";
 import SignUpScreen from "./component/SignUpScreen";
 import SplashScreen from "./component/SplashScreen";
 import React from 'react';
 import HomeScreen from './component/HomeScreen';
+import ChartScreen from './component/ChartScreen';
+import SensorScreen from './component/SensorScreen';
+import DeviceScreen from './component/DeviceScreen';
 
 
 
@@ -16,33 +19,105 @@ import HomeScreen from './component/HomeScreen';
 
 const Stack = createStackNavigator();
 
+const config = {
+
+    animation: 'spring',
+    config: {
+        stiffness: 1000,
+        damping: 500,
+        mass: 3,
+        overshootClamping: true,
+        restDisplacementThreshold: 0.01,
+        restSpeedThreshold: 0.01,
+    },
+};
 
 function RootStack() {
 
     return (
         <Stack.Navigator
             initialRouteName="Splash"
-            screenOptions={{ gestureEnabled: false }}
+            screenOptions={{
+                gestureEnabled: false,
+            }}
         >
             <Stack.Screen
                 name="Splash"
                 component={SplashScreen}
-                options={{  headerShown:false }}
+                options={{
+                    headerShown: false
+                }}
             />
             <Stack.Screen
                 name="SignUp"
                 component={SignUpScreen}
-                options={{  headerShown:false }}
+                options={{
+                    headerShown: false,
+                    gestureEnabled: true,
+                    gestureDirection: 'vertical'
+                }}
+
+
+
             />
             <Stack.Screen
                 name="SignIn"
                 component={SignInScreen}
-                options={{  headerShown:false }}
+                options={{
+                    headerShown: false,
+                    gestureEnabled: true,
+                    gestureDirection: 'vertical'
+                }}
             />
-             <Stack.Screen
+            <Stack.Screen
                 name="Home"
                 component={HomeScreen}
-                options={{  headerShown:false }}
+                options={{
+                    headerShown: false,
+
+
+                    transitionSpec: {
+                        open: config,
+                        close: config,
+                    },
+                }}
+
+            />
+
+            <Stack.Screen
+                name="Chart"
+                component={ChartScreen}
+                options={{
+                    headerShown: false,
+                    ...TransitionPresets.SlideFromRightIOS,
+                }}
+            />
+
+            <Stack.Screen
+                name="Sensor"
+                component={SensorScreen}
+                options={{
+                    title:"Danh Sách cảm biến",
+                    headerTitleStyle:{
+                        paddingRight:40,
+                        alignSelf:'center'
+                    },
+                    ...TransitionPresets.SlideFromRightIOS,
+                }}
+            />
+
+            <Stack.Screen
+                name="Device"
+                component={DeviceScreen}
+                
+                options={{
+                    title:"Danh Sách thiết bị",
+                    headerTitleStyle:{
+                        paddingRight:40,
+                        alignSelf:'center'
+                    },
+                    ...TransitionPresets.SlideFromRightIOS,
+                }}
             />
         </Stack.Navigator>
     );
