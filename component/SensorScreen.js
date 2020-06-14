@@ -39,7 +39,10 @@ function SensorScreen({ navigation }) {
             Value:5,
         },
     ];
+
+    
     return (
+        
         <View>
             
             <ListViewSensor data={data}/>

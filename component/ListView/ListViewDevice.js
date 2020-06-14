@@ -6,9 +6,10 @@ import * as Animetable from "react-native-animatable";
 
 export default class ListViewDevice extends BaseListViewComponent {
 
+    
     constructor(props) {
         super(props);
-        console.log(props.data);
+        
         this.handleGetItemsDone(props.data);
     
     }
