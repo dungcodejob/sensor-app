@@ -6,6 +6,7 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
+    Alert
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
@@ -23,6 +24,7 @@ function SignInScreen({ navigation }) {
             // this.setState({
             //     check_textInputChange: true
             // });
+            setEmail(value);
             setCheck_textInputChange(true);
         } else {
             // this.setState({
@@ -34,13 +36,14 @@ function SignInScreen({ navigation }) {
     }
 
     const SignIn = () => {
-      if (email == "dung" && password == "123456") {
+      console.log(email);
+      if (email == "Dung" && password == "123456") {
+        navigation.navigate("Home");
       }
       else{
-          
+         Alert.alert('Đăng nhập thất bại! tên đăng nhập hoặc mật khẩu không đúng!')
       }
-      // Alert.alert('Đăng nhập thành công!')
-      navigation.navigate("Home");
+      
   }
 
      
