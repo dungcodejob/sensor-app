@@ -37,14 +37,14 @@ export default class BaseListViewComponent extends Component {
     }
 
     // lấy thêm dữ liệu
-    loadMoreItems() {
+    loadMoreItems = () => {
         if (this.isLoadingMore) return;
         if (this.listItems.length == 0) return;
         this.isLoadingMore = true;
         this.getListItems(this.listItems.length);
     }
 
-    onScroll(e) {
+    onScroll = (e) => {
         var windowHeight = Dimensions.get('window').height,
             height = e.nativeEvent.contentSize.height,
             offset = e.nativeEvent.contentOffset.y;
