@@ -6,3 +6,8 @@ install npm
  
  run project
  `react-native run-android`
+ 
+ # Using Firebase
+ 
+ ## Setting
+ 
