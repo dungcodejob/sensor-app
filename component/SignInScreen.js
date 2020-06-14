@@ -1,6 +1,6 @@
 
 
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,15 +14,11 @@ import auth from '@react-native-firebase/auth';
 
 import { TextInput } from "react-native-gesture-handler";
 
-
-
 function SignInScreen({ navigation }) {
 
   const [check_textInputChange, setCheck_textInputChange] = useState(false);
-  const [password, setPassword] = useState("1");
-  const [email, setEmail] = useState("2");
-
-
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
   const textInputChange = (value) => {
     if (value) {
@@ -42,37 +38,42 @@ function SignInScreen({ navigation }) {
 
 
   const SignIn = async () => {
+    console.log("Login button")
+      try {
+        let response = await auth().signInWithEmailAndPassword(email, password)
+        if (response && response.user) {
+          console.log("Login successful")
+          console.log(auth().currentUser.email) // This will using for check User ID
+          navigation.navigate('Home')
+        }
+      } catch (e) {
+        console.log(e)
+        if (e.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+          Alert.alert('That email address is already in use!');
+        }
 
-      let response = await auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log('signed in!');
-        navigation.navigate("Home");
-      })
-      // .catch(error => {
-      //   if (error.code === 'auth/email-already-in-use') {
-      //     console.log('That email address is already in use!');
-      //     Alert.alert('That email address is already in use!');
-      //   }
-  
-      //   if (error.code === 'auth/invalid-email') {
-      //     console.log('That email address is invalid!');
-      //     Alert.alert('That email address is invalid!');
-  
-      //   }
-  
-      //   console.error(error);
-      // });
-      if (response) {
-        console.log(tag, "🍎", response)
+        if (e.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+          Alert.alert('That email address is invalid!');
+        }
+
+        if (e.code === 'auth/user-not-found') {
+          console.log('User not exist!');
+          Alert.alert('User not exist!');
+        }
+
+        if (e.code === 'auth/wrong-password') {
+          console.log('Wrong username or password!');
+          Alert.alert('Wrong username or password!');
+        }
+        
       }
-      else{
-        console.log("Test")
-      }
+      
   }
 
 
- 
+
 
   return (
     <View style={styles.container}>
