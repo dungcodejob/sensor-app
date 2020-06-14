@@ -10,6 +10,7 @@ export default class ListViewDevice extends BaseListViewComponent {
         super(props);
         console.log(props.data);
         this.handleGetItemsDone(props.data);
+    
     }
 
     // getListItems(offset) {
@@ -25,8 +26,7 @@ export default class ListViewDevice extends BaseListViewComponent {
     //         .done();
     // }
 
-    render() {console.log("list View devices");
-        console.log(this.dataSource);
+    render() {
         var buttonAnimationDuration = 0;
         return (
 
@@ -40,12 +40,12 @@ export default class ListViewDevice extends BaseListViewComponent {
                      duration={buttonAnimationDuration += 1000} 
                      style={styles.card}>
                         <View>
-                            <Text style={styles.card_title}>{item.title}</Text>
+                            <Text style={styles.card_title}>{item.type}</Text>
                         </View>
                         <View>
                             <Text style={[{ color: "#7d8a9a" }, { marginRight: 5 }, { marginBottom: 10 }, { textAlign: "right" }]}>Trạng thái</Text>
                             {
-                                item.complete == true ? (
+                                item.status == true ? (
                                     <View style={[{backgroundColor: "#67b373"},styles.status_card]}>
                                 <Text style={styles.status_cardText}>HOẠT ĐỘNG</Text>
                                     </View>
