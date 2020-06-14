@@ -275,7 +275,7 @@ var styles = StyleSheet.create({
     paddingVertical: 2,
 
 
-
+  }
 
 
 });

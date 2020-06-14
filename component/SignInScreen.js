@@ -196,6 +196,7 @@ var styles = StyleSheet.create({
   action: {
     flexDirection: "row",
     marginTop: 10,
+    justifyContent:"center",
     borderBottomWidth: 1,
     borderBottomColor: "#f2f2f2",
     paddingBottom: 5

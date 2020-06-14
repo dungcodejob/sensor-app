@@ -141,6 +141,7 @@ var styles = StyleSheet.create({
     action: {
         alignItems:"center",
         flexDirection: "row",
+        justifyContent:"center",
         marginTop: 10,
         borderBottomWidth: 1,
         borderBottomColor: "#f2f2f2",
