@@ -1,54 +1,74 @@
 
-import React from 'react';
-import { View, Text, FlatList, StyleSheet} from "react-native";
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, StyleSheet } from "react-native";
 
 import ListViewDevice from "./ListView/ListViewDevice";
-
+import firestore from '@react-native-firebase/firestore';
 
 
 function DeviceScreen({ navigation }) {
 
+  const [todo, setTodo] = useState('');
+  const [loading, setLoading] = useState(true)
+  const [todos, setTodos] = useState([])
+  const ref = firestore().collection('todos');
+  //
+  async function addTodo() {
+    await ref.add({
+      title: todo,
+      complete: false,
+    });
+    setTodo('');
+  }
+  //
+  useEffect(() => {
+    return ref.onSnapshot((querySnapshot) => {
+      const list = [];
+      querySnapshot.forEach(doc => {
+        const { title, complete } = doc.data();
+        // console.log(doc)
+        list.push({
+          id: doc.id,
+          title,
+          complete,
+        });
+      });
 
-    // const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    // const [dataSource, setDataSource] = useState(ds.cloneWithRows(['row 1', 'row 2']));
-    const data = [
-        {
-            Title: "senseo 1",
-            Status: 1,
-        },
-        {
-            Title: "senseo 6",
-            Status: 1,
-        },
-        {
-            Title: "senseo 3",
-            Status: 2,
-        },
-        {
-            Title: "senseo 2",
-            Status: 1,
-        },
-        {
-            Title: "senseo 1",
-            Status: 2,
-        },
-    ];
+      setTodos(list);
+      console.log("todo list");
+      console.log(todos);
+      if (loading) {
+        setLoading(false);
+      }
+    });
+  }, []);
+
+  const listViewRender = (list) => {
     return (
-        <View  style={styles.container}>
-            {/* <Feather
+      <ListViewDevice data={list} />
+    );
+  }
+
+  // const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+  // const [dataSource, setDataSource] = useState(ds.cloneWithRows(['row 1', 'row 2']));
+
+
+  return (
+    <View style={styles.container}>
+      {/* <Feather
                 onPress={() => { navigation.goBack(null) }}
                 name="arrow-left" size={20} /> */}
-            <ListViewDevice data={data} />
-        </View>
-    );
+      <ListViewDevice data={todos} />
+    </View>
+  );
 }
 
 var styles = StyleSheet.create({
 
-    container: {
-        flex: 1,
-        backgroundColor: "#EDF0F8"
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#EDF0F8"
+  },
 
 
 
