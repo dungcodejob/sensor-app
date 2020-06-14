@@ -8,23 +8,24 @@ export default class ListViewDevice extends BaseListViewComponent {
 
     constructor(props) {
         super(props);
+        console.log(props.data);
         this.handleGetItemsDone(props.data);
     }
 
-    getListItems(offset) {
-        let url = 'http://example.com/ex_api?limit=10&offset=' + offset
-        fetch(url)
-            .then((text) => text.json())
-            .then((response) => {
-                this.handleGetItemsDone(response.data);
-            })
-            .catch((error) => {
-                this.handleGetItemsError(error);
-            })
-            .done();
-    }
+    // getListItems(offset) {
+    //     let url = 'http://example.com/ex_api?limit=10&offset=' + offset
+    //     fetch(url)
+    //         .then((text) => text.json())
+    //         .then((response) => {
+    //             this.handleGetItemsDone(response.data);
+    //         })
+    //         .catch((error) => {
+    //             this.handleGetItemsError(error);
+    //         })
+    //         .done();
+    // }
 
-    render() {
+    render() {console.log("list View devices");
         console.log(this.dataSource);
         var buttonAnimationDuration = 0;
         return (
@@ -39,12 +40,12 @@ export default class ListViewDevice extends BaseListViewComponent {
                      duration={buttonAnimationDuration += 1000} 
                      style={styles.card}>
                         <View>
-                            <Text style={styles.card_title}>{item.Title}</Text>
+                            <Text style={styles.card_title}>{item.title}</Text>
                         </View>
                         <View>
                             <Text style={[{ color: "#7d8a9a" }, { marginRight: 5 }, { marginBottom: 10 }, { textAlign: "right" }]}>Trạng thái</Text>
                             {
-                                item.Status == 1 ? (
+                                item.complete == true ? (
                                     <View style={[{backgroundColor: "#67b373"},styles.status_card]}>
                                 <Text style={styles.status_cardText}>HOẠT ĐỘNG</Text>
                                     </View>
