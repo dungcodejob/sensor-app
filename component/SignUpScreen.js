@@ -139,6 +139,7 @@ var styles = StyleSheet.create({
     },
 
     action: {
+        alignItems:"center",
         flexDirection: "row",
         marginTop: 10,
         borderBottomWidth: 1,
