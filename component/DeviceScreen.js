@@ -12,6 +12,7 @@ function DeviceScreen({ navigation }) {
   const [loading, setLoading] = useState(true)
   const [todos, setTodos] = useState([])
   const ref = firestore().collection('todos');
+  const ref1 = firestore().collection('Devices');
   //
   async function addTodo() {
     await ref.add({
@@ -26,14 +27,13 @@ function DeviceScreen({ navigation }) {
       const list = [];
       querySnapshot.forEach(doc => {
         const { title, complete } = doc.data();
-        // console.log(doc)
         list.push({
           id: doc.id,
           title,
           complete,
         });
       });
-
+      
       setTodos(list);
       console.log("todo list");
       console.log(todos);
@@ -42,6 +42,10 @@ function DeviceScreen({ navigation }) {
       }
     });
   }, []);
+
+  if (loading) {
+    return null;
+  }
 
   const listViewRender = (list) => {
     return (
