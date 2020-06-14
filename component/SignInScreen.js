@@ -38,12 +38,12 @@ function SignInScreen({ navigation }) {
     const SignIn = () => {
       console.log(email);
       if (email == "Dung" && password == "123456") {
-        navigation.navigate("Home");
+
       }
-      else{
-         Alert.alert('Đăng nhập thất bại! tên đăng nhập hoặc mật khẩu không đúng!')
-      }
-      
+      // else{
+      //    Alert.alert('Đăng nhập thất bại! tên đăng nhập hoặc mật khẩu không đúng!')
+      // }
+      navigation.navigate("Home");
   }
 
      
@@ -167,11 +167,12 @@ var styles = StyleSheet.create({
     },
 
     action: {
-        flexDirection: "row",
-        marginTop: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: "#f2f2f2",
-        paddingBottom: 5
+      alignItems:"center",
+      flexDirection: "row",
+      marginTop: 10,
+      borderBottomWidth: 1,
+      borderBottomColor: "#f2f2f2",
+      paddingBottom: 5
     },
 
     textInput: {
