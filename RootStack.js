@@ -10,6 +10,7 @@ import SensorScreen from './component/SensorScreen';
 import DeviceScreen from './component/DeviceScreen';
 import SettingScreen from './component/SettingScreen';
 import LimitHumidScreen from './component/LimitHumidScreen';
+import LogScreen from './component/LogScreen';
 
 
 
@@ -76,7 +77,11 @@ function RootStack() {
                 name="LimitHumid"
                 component={LimitHumidScreen}
                 options={{
-                    headerShown: false,
+                    title: "Giới hạn độ ẩm",
+                    headerTitleStyle: {
+                        paddingRight: 60,
+                        alignSelf: 'center'
+                    },
                     gestureEnabled: true,
                     gestureDirection: 'vertical'
                 }}
@@ -138,6 +143,20 @@ function RootStack() {
 
                 options={{
                     title: "Thiết lập tài khoản",
+                    headerTitleStyle: {
+                        paddingRight: 40,
+                        alignSelf: 'center'
+                    },
+                    ...TransitionPresets.SlideFromRightIOS,
+                }}
+            />
+
+            <Stack.Screen
+                name="Log"
+                component={LogScreen}
+
+                options={{
+                    title: "Báo cáo hoạt động",
                     headerTitleStyle: {
                         paddingRight: 40,
                         alignSelf: 'center'

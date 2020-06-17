@@ -2,11 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { View,Alert, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
 import firestore from '@react-native-firebase/firestore';
-import database from '@react-native-firebase/database';
 import Feather from "react-native-vector-icons/Feather";
 import ReactNativePickerModule from "react-native-picker-module"
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { color } from 'react-native-reanimated';
 import SplashScreen from "./SplashScreen";
 
 
@@ -66,7 +63,7 @@ function LimitHumidScreen({ navigation }) {
 
   const update = () => {
 
-    if (!selectedIndex) {
+    if (selectedIndex == null) {
       Alert.alert('vui lòng chọn khu vực!');
       return;
     }
@@ -84,6 +81,14 @@ function LimitHumidScreen({ navigation }) {
     }
     else{
       console.log(selectedIndex);
+
+      var oldLowerBound = humidList[selectedIndex].lowerbound;
+      var oldUpperBound = humidList[selectedIndex].upperbound;
+      var text = "Giới hạn độ ẩm của khu vực " + humidList[selectedIndex].id 
+      + " được thay đổi từ " + oldLowerBound + " - " + oldUpperBound 
+      +"%  thành " + lowerBound + " - " + upperBound + "%";
+
+
       firestore().collection('AreaPlant').doc(humidList[selectedIndex].id)
       .update({
         lowerbound: parseInt(lowerBound),
@@ -93,12 +98,24 @@ function LimitHumidScreen({ navigation }) {
         Alert.alert('Cập nhật thành công!');
         setLowerBound(0);
         setUpperBound(0);
+        addLog(text);
         return ref.get();
       });
     }
     
   }
 
+  const addLog = (text) => {
+    firestore()
+    .collection('Log')
+    .add({
+      Time: firestore.FieldValue.serverTimestamp(),
+      Messages: text,
+    })
+  .then(() => {
+    console.log('log added!');
+  });
+  }
 
   return (
 

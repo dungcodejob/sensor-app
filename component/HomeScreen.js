@@ -24,7 +24,7 @@ function HomeScreen({ navigation }) {
     {
       title: 'Báo cáo hoạt động',
       icon: 'file-text',
-      address:'',
+      address:'Log',
     },
     {
       title: 'Thiết lập tài khoản',
@@ -227,7 +227,6 @@ var styles = StyleSheet.create({
     marginTop: 10,
 
     flexDirection: 'row',
-
     // shadowColor: "#000",
     // shadowOffset: {
     //   width: 0,
