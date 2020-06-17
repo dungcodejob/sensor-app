@@ -1152,6 +1152,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-8.0.5.tgz#2086547b95ca1d2906adcd7da9f2d5fc9e7e69fa"
   integrity sha512-Hs8WcN+1UTWWS+q7nBcmcg1A2pU3tOxauJX2yeA9hxvNQClhc6nOpFVr+gg2Dq+IGs5bKf2f3ICLmPL0DSN3FA==
 
+"@react-native-firebase/database@^7.2.2":
+  version "7.2.2"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/database/-/database-7.2.2.tgz#80dd0a06cf0a6d04487854856944c080463c7ca2"
+  integrity sha512-nYrNkXBHmUUsk48JuuqseI3v2NPRUcW+gxqOeZ8DhRAmcDOrISMVrGxknOsr8xQZryeXUB8A+DMGv7rODVYd0A==
+
 "@react-native-firebase/firestore@^7.1.7":
   version "7.1.7"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-7.1.7.tgz#b671f8011f1810f401778f2415640de28e6fbe18"
@@ -5767,6 +5772,11 @@ react-native-iphone-x-helper@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
   integrity sha512-/VbpIEp8tSNNHIvstuA3Swx610whci1Zpc9mqNkqn14DkMbw+ORviln2u0XyHG1kPvvwTNGZY6QpeFwxYaSdbQ==
+
+react-native-picker-module@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-picker-module/-/react-native-picker-module-1.3.1.tgz#6404f4c8515409c0816290b04bdd9cafa175cbf1"
+  integrity sha512-qhLynhQ1AaB1vrhGkzildxmxwz9nLTgACmjoCKWqMcIsNko/hWLrbwNSQJrNHOAALhr4zNhQaV2Kz8wybNLSDw==
 
 react-native-reanimated@^1.9.0:
   version "1.9.0"
