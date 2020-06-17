@@ -1,40 +1,19 @@
 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Alert
 } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Feather from "react-native-vector-icons/Feather";
+
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 import auth from '@react-native-firebase/auth';
 import { StackActions } from '@react-navigation/native';
 function SettingScreen({ navigation }) {
 
-  const [check_textInputChange, setCheck_textInputChange] = useState(false);
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-
-  const textInputChange = (value) => {
-    if (value) {
-      // this.setState({
-      //     check_textInputChange: true
-      // });
-      setEmail(value);
-      setCheck_textInputChange(true);
-    } else {
-      // this.setState({
-      //     check_textInputChange: false
-      // });
-
-      setCheck_textInputChange(false);
-    }
-  }
 
 
   const LogOut = async () => {
