@@ -13,7 +13,8 @@ function DeviceScreen({ navigation }) {
   const [valueText, setValueText] = useState("Tất cả");
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [refresh, setRefresh] = useState(true);
-
+  const [deviceAction, setdeviceAction] = useState(0);
+  const [areaNameText, setAreaNameText] = useState([]);
 
   const [todo, setTodo] = useState('');
   async function addTodo() {
@@ -26,7 +27,6 @@ function DeviceScreen({ navigation }) {
 
 
 
-  const [areaNameText, setAreaNameText] = useState([]);
   const getNameArea = (list) => {
     const nameList = [];
     nameList.push("Tất cả")
@@ -35,6 +35,18 @@ function DeviceScreen({ navigation }) {
     });
     setAreaNameText(nameList);
   }
+
+  const getNumberDeviceAction = (list) => {
+    var i = 0;
+    list.forEach(item => {
+      if(item.status == true){
+        i++;
+      }
+    });
+
+    setdeviceAction(i);
+  }
+  
 
 
   const refDevice = firestore().collection('Devices');
@@ -67,7 +79,7 @@ function DeviceScreen({ navigation }) {
           status,
         });
       });
-
+      getNumberDeviceAction(list);
       setDeviceList(list);
     });
 
@@ -110,6 +122,7 @@ function DeviceScreen({ navigation }) {
           status,
         });
       });
+      getNumberDeviceAction(list);
       setDeviceList(list);
 
       if (loading) {
@@ -186,10 +199,11 @@ function DeviceScreen({ navigation }) {
           <Text style={styles.selectBox_text}>Khu Vực: {valueText}</Text>
           <Feather style={styles.selectBox_icon} name="chevron-down" size={25} />
         </View>
+        <Text style={[{paddingHorizontal:10},{paddingVertical:10},{fontSize:16},{paddingBottom:5}]}>Số thiết bị hoạt động: {deviceAction + "/" + deviceList.length}</Text>
+
       </TouchableOpacity>
       {/* <Text>Selected Item Text: {valueText}</Text>
       <Text>Selected Item ID: {selectedIndex}</Text> */}
-
       <ReactNativePickerModule
         pickerRef={e => (pickerRef = e)}
         selectedValue={selectedIndex}

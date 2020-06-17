@@ -81,7 +81,7 @@ function HomeScreen({ navigation }) {
             duration={1500} style={styles.box}>
             <Image style={styles.box_icon} source={require("../assets/sensor.png")} />
             <Text style={styles.box_title}>Cảm biến độ ẩm</Text>
-            <Text style={styles.box_info}>Hoạt động: 3/5</Text>
+            {/* <Text style={styles.box_info}>Hoạt động: 3/5</Text> */}
 
             <TouchableOpacity 
              onPress={() => {navigation.navigate("Sensor")}}
@@ -98,7 +98,7 @@ function HomeScreen({ navigation }) {
             { marginRight: 0 },
             { marginBottom: 10 },]} source={require("../assets/sprinkler.png")} />
             <Text style={styles.box_title}>Thiết bị tưới nước</Text>
-            <Text style={styles.box_info}>Hoạt động: 1/5</Text>
+            {/* <Text style={styles.box_info}>Hoạt động: 1/5</Text> */}
 
 
             <TouchableOpacity
