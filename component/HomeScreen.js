@@ -14,7 +14,7 @@ function HomeScreen({ navigation }) {
     {
       title: 'Giới hạn độ ẩm',
       icon: 'thermometer',
-      address:''
+      address:'LimitHumid'
     },
     {
       title: 'Biểu đồ độ ẩm',
@@ -29,7 +29,7 @@ function HomeScreen({ navigation }) {
     {
       title: 'Thiết lập tài khoản',
       icon: 'settings',
-      address:'',
+      address:'Setting',
     },
   ];
 

@@ -8,6 +8,8 @@ import HomeScreen from './component/HomeScreen';
 import ChartScreen from './component/ChartScreen';
 import SensorScreen from './component/SensorScreen';
 import DeviceScreen from './component/DeviceScreen';
+import SettingScreen from './component/SettingScreen';
+import LimitHumidScreen from './component/LimitHumidScreen';
 
 
 
@@ -69,6 +71,16 @@ function RootStack() {
                     gestureDirection: 'vertical'
                 }}
             />
+
+            <Stack.Screen
+                name="LimitHumid"
+                component={LimitHumidScreen}
+                options={{
+                    headerShown: false,
+                    gestureEnabled: true,
+                    gestureDirection: 'vertical'
+                }}
+            />
             <Stack.Screen
                 name="Home"
                 component={HomeScreen}
@@ -97,10 +109,10 @@ function RootStack() {
                 name="Sensor"
                 component={SensorScreen}
                 options={{
-                    title:"Danh Sách cảm biến",
-                    headerTitleStyle:{
-                        paddingRight:40,
-                        alignSelf:'center'
+                    title: "Danh Sách cảm biến",
+                    headerTitleStyle: {
+                        paddingRight: 40,
+                        alignSelf: 'center'
                     },
                     ...TransitionPresets.SlideFromRightIOS,
                 }}
@@ -109,12 +121,26 @@ function RootStack() {
             <Stack.Screen
                 name="Device"
                 component={DeviceScreen}
-                
+
                 options={{
-                    title:"Danh Sách thiết bị",
-                    headerTitleStyle:{
-                        paddingRight:40,
-                        alignSelf:'center'
+                    title: "Danh Sách thiết bị",
+                    headerTitleStyle: {
+                        paddingRight: 40,
+                        alignSelf: 'center'
+                    },
+                    ...TransitionPresets.SlideFromRightIOS,
+                }}
+            />
+
+            <Stack.Screen
+                name="Setting"
+                component={SettingScreen}
+
+                options={{
+                    title: "Thiết lập tài khoản",
+                    headerTitleStyle: {
+                        paddingRight: 40,
+                        alignSelf: 'center'
                     },
                     ...TransitionPresets.SlideFromRightIOS,
                 }}

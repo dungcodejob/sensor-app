@@ -10,8 +10,8 @@ import * as Animetable from "react-native-animatable";
 function DeviceScreen({ navigation }) {
 
   let pickerRef = null
-  const [valueText, setValueText] = useState("Tất cả")
-  const [selectedIndex, setSelectedIndex] = useState(null)
+  const [valueText, setValueText] = useState("Tất cả");
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const [refresh, setRefresh] = useState(true);
 
 
@@ -101,11 +101,11 @@ function DeviceScreen({ navigation }) {
     refDevice.onSnapshot((querySnapshot) => {
       var list = [];
       querySnapshot.forEach(doc => {
-        const { AID, type, status } = doc.data();
+        const { AreaId, type, status } = doc.data();
         // console.log(doc)
         list.push({
           id: doc.id,
-          AID,
+          AreaId,
           type,
           status,
         });

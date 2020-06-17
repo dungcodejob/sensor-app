@@ -36,11 +36,25 @@ function SignInScreen({ navigation }) {
     }
   }
 
+  // const focusNextField = (id) => {
+  //   this.inputs[id].focus();
+  // }
 
-  const SignIn = async () => {
+  const signIn = async () => {
     console.log("Login button")
+
+    // if(email){
+    //   Alert.alert('email không được phép để trống');
+    //   return false;
+    // }
+
+    // if(password){
+    //   Alert.alert('password không được phép để trống');
+    //   return false;
+    // }
+    navigation.navigate('Home')
     if(email && password){
-      console.log("username and password is OK")
+      
       try {
         let response = await auth().signInWithEmailAndPassword(email, password)
         if (response && response.user) {
@@ -71,10 +85,14 @@ function SignInScreen({ navigation }) {
         }
         
       }
-    }else{
-      console.log("NO username or password")
-      Alert.alert('PLease give usename and password!');
     }
+    else{
+      Alert.alert('email hoặc password không được phép để trống');
+    }
+
+     
+    
+      
   }
 
 
@@ -129,7 +147,7 @@ function SignInScreen({ navigation }) {
 
 
           <TouchableOpacity
-            onPress={() => SignIn()}
+            onPress={() => signIn()}
             style={[styles.signIn, {
 
               backgroundColor: "#5db8fe"
@@ -202,6 +220,7 @@ var styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 10,
     justifyContent:"center",
+    alignItems:"center",
     borderBottomWidth: 1,
     borderBottomColor: "#f2f2f2",
     paddingBottom: 5

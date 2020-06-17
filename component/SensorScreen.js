@@ -39,6 +39,36 @@ function SensorScreen({ navigation }) {
             Value:5,
         },
     ];
+    const refSensor = firestore().collection('Consult_Humid_from_Sensor');
+
+
+    useEffect(() => {
+
+        refSensor.onSnapshot((querySnapshot) => {
+          var list = [];
+          querySnapshot.forEach(doc => {
+            const { AID, type, status } = doc.data();
+            // console.log(doc)
+            list.push({
+              id: doc.id,
+              type,
+              status,
+            });
+          });
+          setDeviceList(list);
+    
+          if (loading) {
+            setLoading(false);
+          }
+        });
+    
+    
+      }, []);
+    
+    
+      if (loading) {
+        return null;
+      }
 
     
     return (
