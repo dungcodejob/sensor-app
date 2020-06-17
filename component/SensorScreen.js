@@ -96,7 +96,6 @@ function SensorScreen({ navigation }) {
           AreaId,
           type: "sensor",
           status,
-          logHumid,
         });
       });
       setSensorList([]);
