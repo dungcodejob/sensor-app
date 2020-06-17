@@ -10,21 +10,9 @@ import * as Animetable from "react-native-animatable";
 function DeviceScreen({ navigation }) {
 
   let pickerRef = null
-  const [valueText, setValueText] = useState("Tất cả");
+  const [valueText, setValueText] = useState("Chọn khu vực");
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [refresh, setRefresh] = useState(true);
-
-
-  const [todo, setTodo] = useState('');
-  async function addTodo() {
-    await ref.add({
-      title: todo,
-      complete: false,
-    });
-    setTodo('');
-  }
-
-
 
   const [areaNameText, setAreaNameText] = useState([]);
   const getNameArea = (list) => {
@@ -53,23 +41,25 @@ function DeviceScreen({ navigation }) {
     console.log(index);
     if(index != 0){
       query = query.where("AreaId", "==", areaList[index - 1].AreaId);
-    }
-    setDeviceList([]);
-    await query.onSnapshot((querySnapshot) => {
-      var list = [];
-      querySnapshot.forEach(doc => {
-        const { AID, type, status } = doc.data();
-        // console.log(doc)
-        list.push({
-          id: doc.id,
-          AID,
-          type,
-          status,
+      setDeviceList([]);
+      await query.onSnapshot((querySnapshot) => {
+        var list = [];
+        querySnapshot.forEach(doc => {
+          const { AID, type, status } = doc.data();
+          // console.log(doc)
+          list.push({
+            id: doc.id,
+            AID,
+            type,
+            status,
+          });
         });
-      });
 
-      setDeviceList(list);
-    });
+        setDeviceList(list);
+      });
+    }else{
+      setDeviceList([]);
+    }
 
     setRefresh(!refresh);
   }
@@ -110,7 +100,7 @@ function DeviceScreen({ navigation }) {
           status,
         });
       });
-      setDeviceList(list);
+      setDeviceList([]);
 
       if (loading) {
         setLoading(false);

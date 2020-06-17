@@ -91,8 +91,6 @@ function RootStack() {
                 component={HomeScreen}
                 options={{
                     headerShown: false,
-
-
                     transitionSpec: {
                         open: config,
                         close: config,
@@ -105,7 +103,11 @@ function RootStack() {
                 name="Chart"
                 component={ChartScreen}
                 options={{
-                    headerShown: false,
+                    title: "Biểu đồ độ ẩm",
+                    headerTitleStyle: {
+                        paddingRight: 40,
+                        alignSelf: 'center'
+                    },
                     ...TransitionPresets.SlideFromRightIOS,
                 }}
             />
