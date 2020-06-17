@@ -39,6 +39,8 @@ function SignInScreen({ navigation }) {
 
   const SignIn = async () => {
     console.log("Login button")
+    if(email && password){
+      console.log("username and password is OK")
       try {
         let response = await auth().signInWithEmailAndPassword(email, password)
         if (response && response.user) {
@@ -69,7 +71,10 @@ function SignInScreen({ navigation }) {
         }
         
       }
-      
+    }else{
+      console.log("NO username or password")
+      Alert.alert('PLease give usename and password!');
+    }
   }
 
 

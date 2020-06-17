@@ -41,12 +41,12 @@ export default class ListViewDevice extends BaseListViewComponent {
                      duration={buttonAnimationDuration += 1000} 
                      style={styles.card}>
                         <View>
-                            <Text style={styles.card_title}>{item.type}</Text>
+                            <Text style={styles.card_title}>{item.title}</Text>
                         </View>
                         <View>
                             <Text style={[{ color: "#7d8a9a" }, { marginRight: 5 }, { marginBottom: 10 }, { textAlign: "right" }]}>Trạng thái</Text>
                             {
-                                item.status == true ? (
+                                item.complete == true ? (
                                     <View style={[{backgroundColor: "#67b373"},styles.status_card]}>
                                 <Text style={styles.status_cardText}>HOẠT ĐỘNG</Text>
                                     </View>
