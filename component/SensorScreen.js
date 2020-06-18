@@ -194,47 +194,6 @@ function SensorScreen({ navigation }) {
     return null;
   }
 
-  const renderListView = () => {
-    var animationDuration = 0;
-    var i = 1000;
-    return (
-      <FlatList
-
-        data={sensorList}
-        extraData={refresh}
-        renderItem={({ item }) => {
-          i -= 200;
-          return <Animetable.View
-            animation="fadeInLeft"
-            duration={animationDuration += i}
-            style={styles.card}>
-            <View>
-              <Text style={styles.card_title}>{item.type}</Text>
-            </View>
-            <View>
-              <Text style={[{ color: "#7d8a9a" }, { marginRight: 5 }, { marginBottom: 10 }, { textAlign: "right" }]}>Trạng thái</Text>
-              {
-                item.status == true ? (
-                  <View style={[{ backgroundColor: "#67b373" }, styles.status_card]}>
-                    <Text style={styles.status_cardText}>HOẠT ĐỘNG</Text>
-                  </View>
-                ) : (
-                    <View style={[{ backgroundColor: "#f79229" }, styles.status_card]}>
-                      <Text style={styles.status_cardText}>KHÔNG HOẠT ĐỘNG</Text>
-                    </View>
-                  )
-
-              }
-            </View>
-          </Animetable.View>
-        }
-
-        }
-      />
-    )
-  }
-
-
   // const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
   // const [dataSource, setDataSource] = useState(ds.cloneWithRows(['row 1', 'row 2']));
 
