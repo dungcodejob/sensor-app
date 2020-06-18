@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import ReactNativePickerModule from "react-native-picker-module"
@@ -405,5 +404,3 @@ var styles = StyleSheet.create({
 });
 
 export default SensorScreen
-
-
