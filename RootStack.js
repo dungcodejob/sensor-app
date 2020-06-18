@@ -82,8 +82,7 @@ function RootStack() {
                         paddingRight: 60,
                         alignSelf: 'center'
                     },
-                    gestureEnabled: true,
-                    gestureDirection: 'vertical'
+                    ...TransitionPresets.SlideFromRightIOS,
                 }}
             />
             <Stack.Screen
