@@ -10,6 +10,7 @@ import SensorScreen from './component/SensorScreen';
 import DeviceScreen from './component/DeviceScreen';
 import SettingScreen from './component/SettingScreen';
 import LimitHumidScreen from './component/LimitHumidScreen';
+import ControlScreen from './component/ControlScreen';
 import LogScreen from './component/LogScreen';
 
 
@@ -158,6 +159,20 @@ function RootStack() {
 
                 options={{
                     title: "Báo cáo hoạt động",
+                    headerTitleStyle: {
+                        paddingRight: 40,
+                        alignSelf: 'center'
+                    },
+                    ...TransitionPresets.SlideFromRightIOS,
+                }}
+            />
+
+            <Stack.Screen
+                name="Control"
+                component={ControlScreen}
+
+                options={{
+                    title: "Điều khiến thiết bị",
                     headerTitleStyle: {
                         paddingRight: 40,
                         alignSelf: 'center'

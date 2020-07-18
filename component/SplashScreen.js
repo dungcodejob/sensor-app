@@ -22,7 +22,7 @@ function SplashScreen({ navigation }) {
             </View>
   
             <Animetable.View animation="fadeInUpBig" style={styles.footer}>
-              <Text style={styles.title}>Chào mừng bạn đến với BCODE</Text>
+              <Text style={styles.title}>Chào mừng bạn đến với AFARM</Text>
               <Text style={styles.text}>Sign in with account</Text>
               <View style={styles.button}>
   
@@ -72,7 +72,9 @@ var styles = StyleSheet.create({
 
   logo: {
     width: logo_size,
-    height: logo_size
+    height: logo_size,
+    borderRadius: logo_size/2,
+    overflow: "hidden"
   },
 
   title: {

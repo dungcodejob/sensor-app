@@ -63,12 +63,31 @@ function SensorScreen({ navigation }) {
 
         });
 
+        var loglist = []
+        var nextref = firestore().collection('SensorLog').orderBy("Time")
+        nextref.onSnapshot((querySnapshot) => {
+          querySnapshot.forEach(doc3 => {
+            const {Humid, SID, Temp, Time} = doc3.data();
+            if (SID === doc.id){
+              loglist.push({
+                id: doc3.id,
+                Time,
+                Humid,
+                Temp
+              })
+            } 
+          })
+        }
+        );
+
+        console.log(loglist)
 
         list.push({
           id: doc.id,
           AreaId,
           status,
           datalist,
+          loglist,
         });
       });
 
@@ -98,56 +117,6 @@ function SensorScreen({ navigation }) {
 
   }, []);
 
-  const getSensors = async (index) => {
-    var query = refSensor;
-
-    console.log(index);
-    if (index != 0) {
-      query = query.where("AreaId", "==", areaList[index - 1].AreaId);
-      setSensorList([]);
-      await query.onSnapshot((querySnapshot) => {
-        var list = [];
-        querySnapshot.forEach(doc => {
-          const { AID, status } = doc.data();
-          // console.log(doc)
-          list.push({
-            id: doc.id,
-            AID,
-            type: "sensor",
-            status,
-          });
-        });
-
-        setSensorList(list);
-      });
-    }
-    else{
-      setSensorList([]);
-    }
-    setRefresh(!refresh);
-  }
-
-  useEffect(() => {
-    console.log("getArea");
-    refArea.onSnapshot((querySnapshot) => {
-      const list = [];
-      querySnapshot.forEach(doc => {
-        const { location, quantityofplant, typeplant } = doc.data();
-        // console.log(doc)
-        list.push({
-          AreaId: doc.id,
-          location,
-          quantityofplant,
-          typeplant,
-        });
-      });
-
-      getNameArea(list);
-      setAreaList(list);
-    });
-
-
-  }, []);
 
   useEffect(() => {
 
@@ -171,12 +140,30 @@ function SensorScreen({ navigation }) {
           });
         });
 
+        var loglist = []
+        var nextref = firestore().collection('SensorLog').orderBy("Time")
+        nextref.onSnapshot((querySnapshot) => {
+          querySnapshot.forEach(doc3 => {
+            const {Humid, SID, Temp, Time} = doc3.data();
+            if (SID === doc.id){
+              loglist.push({
+                id: doc3.id,
+                Time,
+                Humid,
+                Temp
+              })
+            } 
+          })
+        }
+        );
+
         list.push({
           id: doc.id,
           AreaId,
           type: "sensor",
           status,
-          datalist
+          datalist,
+          loglist,
         });
 
       });
@@ -197,6 +184,60 @@ function SensorScreen({ navigation }) {
   // const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
   // const [dataSource, setDataSource] = useState(ds.cloneWithRows(['row 1', 'row 2']));
 
+  // const renderListView = () => {
+  //   var animationDuration = 0;
+  //   var i = 1000;
+    
+  //   return (
+  //     <FlatList
+
+  //       data={sensorList}
+  //       extraData={sensorList}
+  //       renderItem={({ item }) => {
+  //         i -= 200;
+  //         var time = new Date(item.datalist.length > 0 && item.datalist[item.datalist.length - 1].Time ? item.datalist[item.datalist.length - 1].Time._seconds * 1000 : 0);
+  //         return <Animetable.View
+  //           animation="fadeInLeft"
+  //           duration={animationDuration += i}
+  //           style={styles.card}>
+  //           <View style={[{flexDirection: "row"},{display:"flex"},{justifyContent:"space-between"}]}>
+  //           <View>
+  //             <Text style={styles.card_title}>{item.id}</Text>
+  //             <Text style={[{ fontSize: 16 },{marginTop:5}]}>{"Độ ẩm: " + (item.datalist.length > 0 ? item.datalist[item.datalist.length - 1].humid + "%" : '')}</Text>
+
+  //           </View>
+  //           <View>
+  //             <Text style={[{ color: "#7d8a9a" }, { marginRight: 5 }, { marginBottom: 10 }, { textAlign: "right" }]}>Trạng thái</Text>
+  //             {
+  //               item.status == true ? (
+  //                 <View style={[{ backgroundColor: "#67b373" }, styles.status_card]}>
+  //                   <Text style={styles.status_cardText}>HOẠT ĐỘNG</Text>
+  //                 </View>
+  //               ) : (
+  //                   <View style={[{ backgroundColor: "#f79229" }, styles.status_card]}>
+  //                     <Text style={styles.status_cardText}>KHÔNG HOẠT ĐỘNG</Text>
+  //                   </View>
+  //                 )
+
+  //             }
+  //           </View>
+  //           </View>
+            
+
+  //           <Text style={[{ fontSize: 16 },{marginTop:15}]}>
+  //               {"Lần cập nhật cuối: " + (item.datalist.length > 0 ? 
+  //                 (time.getDate()+'-'+ (time.getMonth() + 1)+'-'+time.getFullYear()+", ") + time.toLocaleTimeString() : '')}
+  //               </Text>
+            
+  //         </Animetable.View>
+          
+  //       }
+
+  //       }
+  //     />
+  //   )
+  // }
+
   const renderListView = () => {
     var animationDuration = 0;
     var i = 1000;
@@ -208,7 +249,8 @@ function SensorScreen({ navigation }) {
         extraData={sensorList}
         renderItem={({ item }) => {
           i -= 200;
-          var time = new Date(item.datalist.length > 0 && item.datalist[item.datalist.length - 1].Time ? item.datalist[item.datalist.length - 1].Time._seconds * 1000 : 0);
+          console.log(item)
+          var time = new Date(item.loglist.length > 0 && item.loglist[item.loglist.length - 1].Time ? item.loglist[item.loglist.length - 1].Time._seconds * 1000 : 0);
           return <Animetable.View
             animation="fadeInLeft"
             duration={animationDuration += i}
@@ -216,8 +258,8 @@ function SensorScreen({ navigation }) {
             <View style={[{flexDirection: "row"},{display:"flex"},{justifyContent:"space-between"}]}>
             <View>
               <Text style={styles.card_title}>{item.id}</Text>
-              <Text style={[{ fontSize: 16 },{marginTop:5}]}>{"Độ ẩm: " + (item.datalist.length > 0 ? item.datalist[item.datalist.length - 1].humid + "%" : '')}</Text>
-
+              <Text style={[{ fontSize: 16 },{marginTop:5}]}>{"Độ ẩm: " + (item.loglist.length > 0 ? item.loglist[item.loglist.length - 1].Humid + "%" : 'No value')}</Text>
+              <Text style={[{ fontSize: 16 },{marginTop:5}]}>{"Nhiệt độ: " + (item.loglist.length > 0 ? item.loglist[item.loglist.length - 1].Temp + "°C" : 'No value')}</Text>
             </View>
             <View>
               <Text style={[{ color: "#7d8a9a" }, { marginRight: 5 }, { marginBottom: 10 }, { textAlign: "right" }]}>Trạng thái</Text>
@@ -238,8 +280,8 @@ function SensorScreen({ navigation }) {
             
 
             <Text style={[{ fontSize: 16 },{marginTop:15}]}>
-                {"Lần cập nhật cuối: " + (item.datalist.length > 0 ? 
-                  (time.getDate()+'-'+time.getMonth()+'-'+time.getFullYear()+", ") + time.toLocaleTimeString() : '')}
+                {"Lần cập nhật cuối: " + (item.loglist.length > 0 ? 
+                  (time.getDate()+'-'+ (time.getMonth() + 1)+'-'+time.getFullYear()+", ") + time.toLocaleTimeString() : '')}
                 </Text>
             
           </Animetable.View>

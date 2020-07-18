@@ -52,7 +52,7 @@ function SignInScreen({ navigation }) {
     //   Alert.alert('password không được phép để trống');
     //   return false;
     // }
-    navigation.navigate('Home')
+    //navigation.navigate('Home')
     if(email && password){
       
       try {
@@ -101,7 +101,7 @@ function SignInScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.text_header}>Welcome Bcode!</Text>
+        <Text style={styles.text_header}>Welcome AFarm!</Text>
       </View>
 
       <View style={styles.footer}>

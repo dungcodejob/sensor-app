@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import firestore from '@react-native-firebase/firestore';
 
-function LogScreen({ navigation }) {
+function ControlScreen({ navigation }) {
 
   const [check_textInputChange, setCheck_textInputChange] = useState(false);
   const [logList, setLogList] = useState([]);
@@ -214,4 +214,4 @@ var styles = StyleSheet.create({
 
 });
 
-export default LogScreen
+export default ControlScreen
