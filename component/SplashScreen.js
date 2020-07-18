@@ -22,7 +22,9 @@ function SplashScreen({ navigation }) {
             </View>
   
             <Animetable.View animation="fadeInUpBig" style={styles.footer}>
+
               <Text style={styles.title}>Chào mừng bạn đến với AFARM</Text>
+
               <Text style={styles.text}>Sign in with account</Text>
               <View style={styles.button}>
   

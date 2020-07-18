@@ -74,9 +74,9 @@ function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
 
-      <View style={styles.average}>
+      {/* <View style={styles.average}>
         <Text style={styles.average_text}>Độ ẩm trung bình: 45</Text>
-      </View>
+      </View> */}
 
       <View style={styles.list_group}>
         <View style={[{ flexDirection: 'row' }, { justifyContent: 'space-between' }]}>

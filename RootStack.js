@@ -103,11 +103,13 @@ function RootStack() {
                 name="Chart"
                 component={ChartScreen}
                 options={{
+
                     title: "Biểu đồ độ ẩm",
                     headerTitleStyle: {
                         paddingRight: 40,
                         alignSelf: 'center'
                     },
+
                     ...TransitionPresets.SlideFromRightIOS,
                 }}
             />
