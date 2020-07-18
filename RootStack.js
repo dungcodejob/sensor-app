@@ -12,6 +12,7 @@ import SettingScreen from './component/SettingScreen';
 import LimitHumidScreen from './component/LimitHumidScreen';
 import ControlScreen from './component/ControlScreen';
 import LogScreen from './component/LogScreen';
+import ChangeIntensityScreen from './component/ChangeIntensityScreen';
 
 
 
@@ -105,6 +106,21 @@ function RootStack() {
                 options={{
 
                     title: "Biểu đồ độ ẩm",
+                    headerTitleStyle: {
+                        paddingRight: 40,
+                        alignSelf: 'center'
+                    },
+
+                    ...TransitionPresets.SlideFromRightIOS,
+                }}
+            />
+
+            <Stack.Screen
+                name="ChangeIntensity"
+                component={ChangeIntensityScreen}
+                options={{
+
+                    title: "Điền chỉnh cường độ",
                     headerTitleStyle: {
                         paddingRight: 40,
                         alignSelf: 'center'

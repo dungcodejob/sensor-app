@@ -74,13 +74,14 @@ function DeviceScreen({ navigation }) {
     query.onSnapshot((querySnapshot) => {
       var list = [];
       querySnapshot.forEach(doc => {
-        const { AID, type, status } = doc.data();
+        const { AID, type, status, Name } = doc.data();
         // console.log(doc)
         list.push({
           id: doc.id,
           AID,
           type,
           status,
+          Name,
         });
       });
 
@@ -107,12 +108,13 @@ function DeviceScreen({ navigation }) {
       getNameArea(list);
       setAreaList(list);
     });
-    
+
     if (loading) {
       setLoading(false);
     }
 
   }, []);
+
 
   // useEffect(() => {
 
@@ -179,28 +181,33 @@ function DeviceScreen({ navigation }) {
             animation="fadeInLeft"
             duration={animationDuration += i}
             style={styles.card}>
-            <View style={[{ flexDirection: "row" }, { display: "flex" }, { justifyContent: "space-between" }]}>
-              <View>
-                <Text style={styles.card_title}>{item.id}</Text>
-                <Text style={[{ fontSize: 16 }, { marginTop: 5 }]}>{"Loại : " + item.type}</Text>
 
-              </View>
-              <View>
-                <Text style={[{ color: "#7d8a9a" }, { marginRight: 5 }, { marginBottom: 10 }, { textAlign: "right" }]}>Trạng thái</Text>
-                {
-                  item.status == true ? (
-                    <View style={[{ backgroundColor: "#67b373" }, styles.status_card]}>
-                      <Text style={styles.status_cardText}>HOẠT ĐỘNG</Text>
-                    </View>
-                  ) : (
-                      <View style={[{ backgroundColor: "#f79229" }, styles.status_card]}>
-                        <Text style={styles.status_cardText}>KHÔNG HOẠT ĐỘNG</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ChangeIntensity', { id : item.id })}>
+              <View style={[{ flexDirection: "row" }, { display: "flex" }, { justifyContent: "space-between" }]}>
+                <View>
+                  <Text style={styles.card_title}>{item.Name}</Text>
+                  <Text style={[{ fontSize: 16 }, { marginTop: 5 }]}>{"Loại : " + item.type}</Text>
+
+                </View>
+                <View>
+                  <Text style={[{ color: "#7d8a9a" }, { marginRight: 5 }, { marginBottom: 10 }, { textAlign: "right" }]}>Trạng thái</Text>
+                  {
+                    item.status == true ? (
+                      <View style={[{ backgroundColor: "#67b373" }, styles.status_card]}>
+                        <Text style={styles.status_cardText}>HOẠT ĐỘNG</Text>
                       </View>
-                    )
+                    ) : (
+                        <View style={[{ backgroundColor: "#f79229" }, styles.status_card]}>
+                          <Text style={styles.status_cardText}>KHÔNG HOẠT ĐỘNG</Text>
+                        </View>
+                      )
 
-                }
+                  }
+                </View>
               </View>
-            </View>
+
+            </TouchableOpacity>
           </Animetable.View>
         }
 

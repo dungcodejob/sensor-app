@@ -215,7 +215,7 @@ var styles = StyleSheet.create({
 
 
   menu: {
-    flex: 4,
+    flex: 5,
 
     paddingHorizontal: 20,
     paddingVertical: 10,

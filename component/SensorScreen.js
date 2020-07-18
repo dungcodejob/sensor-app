@@ -123,7 +123,7 @@ function SensorScreen({ navigation }) {
     refSensor.onSnapshot((querySnapshot) => {
       var list = [];
       querySnapshot.forEach(async doc => {
-        const { AreaId, status } = doc.data();
+        const { AreaId, status,Name } = doc.data();
         // console.log(doc)
 
         var datalist = []
@@ -162,6 +162,7 @@ function SensorScreen({ navigation }) {
           AreaId,
           type: "sensor",
           status,
+          Name,
           datalist,
           loglist,
         });
@@ -257,7 +258,7 @@ function SensorScreen({ navigation }) {
             style={styles.card}>
             <View style={[{flexDirection: "row"},{display:"flex"},{justifyContent:"space-between"}]}>
             <View>
-              <Text style={styles.card_title}>{item.id}</Text>
+              <Text style={styles.card_title}>{item.Name}</Text>
               <Text style={[{ fontSize: 16 },{marginTop:5}]}>{"Độ ẩm: " + (item.loglist.length > 0 ? item.loglist[item.loglist.length - 1].Humid + "%" : 'No value')}</Text>
               <Text style={[{ fontSize: 16 },{marginTop:5}]}>{"Nhiệt độ: " + (item.loglist.length > 0 ? item.loglist[item.loglist.length - 1].Temp + "°C" : 'No value')}</Text>
             </View>
