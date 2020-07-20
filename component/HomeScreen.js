@@ -17,11 +17,6 @@ function HomeScreen({ navigation }) {
       address:'LimitHumid'
     },
     {
-      title: 'Điều khiển thiết bị',
-      icon: 'plus-circle',
-      address:'Control'
-    },
-    {
       title: 'Biểu đồ độ ẩm',
       icon: 'bar-chart-2',
       address:'Chart',
