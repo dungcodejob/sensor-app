@@ -1,86 +1,52 @@
 
-
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
-  FlatList
-} from "react-native";
+import { View, Alert, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
 import firestore from '@react-native-firebase/firestore';
+import Feather from "react-native-vector-icons/Feather";
+import ReactNativePickerModule from "react-native-picker-module"
+import SplashScreen from "./SplashScreen";
+
+
 
 function ControlScreen({ navigation }) {
 
-  const [check_textInputChange, setCheck_textInputChange] = useState(false);
-  const [logList, setLogList] = useState([]);
-  const ref = firestore().collection('Log').orderBy("Time");
+  // const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+  // const [dataSource, setDataSource] = useState(ds.cloneWithRows(['row 1', 'row 2']));
+  let pickerRef = null
+  const [lowerBound, setLowerBound] = useState();
+  const [upperBound, setUpperBound] = useState();
+  const [humidList, setHumidList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [valueText, setValueText] = useState("Tất cả");
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
-  const compareDate = (date1, date2) => {
-    if (date1.getDay() != date2.getDay()) {
-      return false;
-    }
-    else if (date1.getMonth() != date2.getMonth()) {
-      return false;
-    }
-    else if (date1.getFullYear() != date2.getFullYear()) {
-      return false;
-    }
-    return true;
+  const ref = firestore().collection('AreaPlant');
+
+  const [areaNameText, setAreaNameText] = useState([]);
+  const getNameArea = (list) => {
+    const nameList = [];
+    list.forEach(item => {
+      nameList.push(item.id);
+    });
+    setAreaNameText(nameList);
   }
+
 
   useEffect(() => {
     ref.onSnapshot((querySnapshot) => {
       var list = [];
       querySnapshot.forEach(doc => {
-        const { Time, Messages } = doc.data();
+        const { AID, lowerbound, upperbound } = doc.data();
         // console.log(doc)
-
-
         list.push({
           id: doc.id,
-          Time: new Date(Time ? Time._seconds * 1000 : 0),
-          Messages,
+          lowerbound, // 0-1
+          upperbound, // 0-5000
         });
       });
 
-
-      // đảo ngược list
-      var oldList = []
-      for (let index = list.length - 1; index >= 0; index--) {
-        oldList.push(list[index]);
-      }
-
-      var formatList = [];
-      oldList.forEach(item1 => {
-        var check = false;
-        formatList.forEach(item2 => {
-          if (compareDate(item1.Time, item2.Time) == true) {
-            item2.List.push({
-              Time:item1.Time,
-              Messages:item1.Messages
-            });
-            check = true;
-          }
-        });
-
-        if (check == false) {
-          formatList.push({
-            Time: item1.Time,
-            List: [{
-              Time:item1.Time,
-              Messages:item1.Messages
-            }],
-          });
-
-
-        }
-      });
-      console.log(formatList);
-
-      setLogList(formatList);
+      getNameArea(list);
+      setHumidList(list);
       if (loading) {
         setLoading(false);
       }
@@ -91,127 +57,273 @@ function ControlScreen({ navigation }) {
 
 
   if (loading) {
-    return null;
+    return SplashScreen;
   }
 
-  const getDayNameString = (i) => {
-    if (i == 0) {
-      return 'Chủ nhật';
+
+  const update = () => {
+
+    if (selectedIndex == null) {
+      Alert.alert('vui lòng chọn khu vực!');
+      return;
     }
-    else if (i == 1) {
-      return 'Thứ hai'
+    if (!lowerBound || !upperBound) {
+      Alert.alert('giới hạn trên hoặc giới hạn dưới không được phép để trống!');
+      return;
     }
-    else if (i == 2) {
-      return 'Thứ ba'
+    else if (lowerBound > 1 || upperBound > 5000) {
+      Alert.alert('giới hạn độ ẩm phải ở trong khoảng từ !');
+      return;
     }
-    else if (i == 3) {
-      return 'Thứ tư'
+    else {
+      console.log(selectedIndex);
+
+      var oldLowerBound = humidList[selectedIndex].lowerbound;
+      var oldUpperBound = humidList[selectedIndex].upperbound;
+      var text = "Giới hạn độ ẩm của khu vực " + humidList[selectedIndex].id
+        + " được thay đổi từ " + oldLowerBound + " - " + oldUpperBound
+        + "%  thành " + lowerBound + " - " + upperBound + "%";
+
+      try {
+        console.log("MQTT test")
+        
+
+        ////
+
+
+
+        ///// Seting for mqtt server
+        var host_1 = "tcp://52.187.125.59:1883"
+        var username_1 = "BKvm"
+        var password_1 = "Hcmut_CSE_2020"
+        /////
+        var mqtt = require('@taoqf/react-native-mqtt')
+        var client = mqtt.connect('mqtt://test.mosquitto.org')
+
+        
+      } catch (error) {
+        console.log(error)
+      }
+
+
+      // firestore().collection('AreaPlant').doc(humidList[selectedIndex].id)
+      // .update({
+      //   lowerbound: parseInt(lowerBound),
+      //   upperbound: parseInt(upperBound),
+      // }).then(() => {
+      //   console.log('Cập nhật thành công!');
+      //   Alert.alert('Cập nhật thành công!');
+      //   setLowerBound(0);
+      //   setUpperBound(0);
+      //   addLog(text);
+      //   return ref.get();
+      // });
     }
-    else if (i == 4) {
-      return 'Thứ năm'
-    }
-    else if (i == 5) {
-      return 'Thứ sáu'
-    }
-    else if (i == 6) {
-      return 'Thứ bảy'
-    }
+
   }
 
-  const renderLogView = (list) => {
-    if(list){
-      return list.map((item) => {
-        return (
-          <View style={[styles.item_log,]}>
-            <Text style={styles.item_log_time}>
-              {item.Time.getHours() + ":" + item.Time.getMinutes()}
-            </Text>
-            <Text style={styles.item_log_messages}>{item.Messages}</Text>
-          </View>
-        )
+  const addLog = (text) => {
+    firestore()
+      .collection('Log')
+      .add({
+        Time: firestore.FieldValue.serverTimestamp(),
+        Messages: text,
+      })
+      .then(() => {
+        console.log('log added!');
       });
-    }
-    else{
-      return null
-    }
-  }
-
-  //var a = new Date()
-  const getMonthofDay = (month) => {
-    return month + 1
   }
 
   return (
+
     <View style={styles.container}>
+      <TouchableOpacity
+        style={{
+          paddingVertical: 8,
+          borderBottomWidth: 1,
+          borderTopWidth: 1,
+          borderColor: "rgba(0,0,0,.32)",
+        }}
+        onPress={() => {
+          pickerRef.show();
+        }}>
+        <View style={styles.selectBox}>
+          <Text style={styles.selectBox_text}>Khu Vực: {valueText}</Text>
+          <Feather style={styles.selectBox_icon} name="chevron-down" size={25} />
+        </View>
+      </TouchableOpacity>
 
-      <FlatList
 
-        data={logList}
-        extraData={logList}
-        renderItem={({ item }) => {
-          //console.log(item.Time.getMonth())
-
-          return <View style={[styles.item]}>
-            <View style={styles.title}>
-            <Text style={styles.title_text}>
-              {getDayNameString(item.Time.getDay())}, {item.Time.getDate() + "-" + getMonthofDay(item.Time.getMonth())}
-            </Text>
-            </View>
-            {
-              renderLogView(item.List)
-            }
-          </View>
-        }
-
-        }
+      <ReactNativePickerModule
+        pickerRef={e => (pickerRef = e)}
+        selectedValue={selectedIndex}
+        title={"Select a Area"}
+        items={areaNameText}
+        onDismiss={() => {
+          console.log("onDismiss")
+        }}
+        onCancel={() => {
+          console.log("Cancelled")
+        }}
+        onValueChange={(valueText, index) => {
+          // console.log("value: ", valueText)
+          // console.log("index: ", index)
+          setValueText(valueText)
+          setSelectedIndex(index)
+          console.log(humidList)
+        }}
       />
+
+      <View style={[{ flex: 1 }, { backgroundColor: "#fff" }, { padding: 16 }]}>
+        <Text style={styles.title}>{selectedIndex != null ? ("Giới hạn độ ẩm hiện tại :   " + humidList[selectedIndex].lowerbound + "  -  " + humidList[selectedIndex].upperbound + " %") : 'vui lòng chọn khu vực để xem giới hạn độ ẩm'} </Text>
+
+        <Text style={[styles.title, { marginTop: 20 }]}>Đổi giới hạn độ ẩm</Text>
+
+        <View style={styles.action}>
+          <Text style={[{ width: 45 }, { fontSize: 18 }]}>Từ    : </Text>
+          <TextInput
+            placeholder=""
+            style={styles.textInput}
+            value={lowerBound}
+            keyboardType='numeric'
+            onChangeText={value => setLowerBound(value)}
+          />
+
+          {/* {check_textInputChange ? (
+          <Feather name="check-circle" color="green" size={20} />
+        ) : null} */}
+        </View>
+
+        <View style={styles.action}>
+          <Text style={[{ width: 45 }, { fontSize: 18 }]}>Đến : </Text>
+          <TextInput
+            placeholder=""
+            style={styles.textInput}
+            keyboardType='numeric'
+            value={upperBound}
+            onChangeText={value => setUpperBound(value)}
+          />
+
+          {/* {check_textInputChange ? (
+          <Feather name="check-circle" color="green" size={20} />
+        ) : null} */}
+        </View>
+        <TouchableOpacity
+          onPress={() => update()}
+          style={[styles.signIn, { backgroundColor: "#5db8fe" }]}>
+
+          <Text style={[styles.textSign]}>
+            Cập nhật
+                </Text>
+        </TouchableOpacity>
+      </View>
+
+
     </View>
   );
 }
 
-
 var styles = StyleSheet.create({
+
   container: {
     flex: 1,
-    backgroundColor: "#fff"
-
+    backgroundColor: "#EDF0F8"
   },
-  item: {
+
+  selectBox: {
     display: "flex",
+    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#6aa8fd",
+    backgroundColor: "#fff",
+    marginHorizontal: 8,
+    borderRadius: 4,
   },
 
-  title:{
-    width:"100%",
-    backgroundColor:"#e4eaee",
+  selectBox_text: {
+    fontSize: 16,
+    fontWeight: "700",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
 
-  title_text:{
-    fontSize:18,
-    paddingVertical:16,
-    paddingHorizontal:10,
+  selectBox_icon: {
+    paddingHorizontal: 8,
   },
 
-  item_log:{
+  card: {
+    display: "flex",
+    backgroundColor: "#fff",
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: "rgba(0,0,0,.32)",
     flexDirection: "row",
-    borderColor:"#ced9df",
-    alignItems:"center",
-    borderBottomWidth:1,
-    paddingVertical:16,
-    paddingHorizontal:10,
+    justifyContent: "space-between",
+    padding: 12,
+    height: "auto",
+    margin: 16,
   },
 
-  item_log_time:{
-    paddingRight: 20,
-    fontSize:18,
-    fontWeight:"bold",
-    width:"20%",
-  },
-  item_log_messages:{
-    width:"80%",
-    fontSize:16,
+  card_title: {
+    fontSize: 18,
   },
 
+  status_card: {
+    borderRadius: 30,
+  },
+
+  status_cardText: {
+    color: "#fff",
+    fontWeight: "700",
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+
+
+  },
+
+  title: {
+    color: "#05375a",
+    fontSize: 18
+  },
+
+  action: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+
+    paddingBottom: 5,
+
+  },
+
+  textInput: {
+    flex: 1,
+    paddingLeft: 10,
+    color: "#05375a",
+    fontSize: 18
+  },
+
+  signIn: {
+    marginTop: 20,
+    width: "auto",
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+
+  },
+
+  textSign: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#fff"
+  }
 
 });
 
+
+
 export default ControlScreen
+
+
