@@ -84,18 +84,18 @@ function ChangeIntensityScreen({ navigation, route }) {
                 + "%  thành " + lowerBound + " - " + upperBound + "%";
 
 
-            firestore().collection('AreaPlant').doc(humidList[selectedIndex].id)
-                .update({
-                    lowerbound: parseInt(lowerBound),
-                    upperbound: parseInt(upperBound),
-                }).then(() => {
-                    console.log('Cập nhật thành công!');
-                    Alert.alert('Cập nhật thành công!');
-                    setLowerBound(0);
-                    setUpperBound(0);
-                    addLog(text);
-                    return ref.get();
-                });
+            // firestore().collection('AreaPlant').doc(humidList[selectedIndex].id)
+            //     .update({
+            //         lowerbound: parseInt(lowerBound),
+            //         upperbound: parseInt(upperBound),
+            //     }).then(() => {
+            //         console.log('Cập nhật thành công!');
+            //         Alert.alert('Cập nhật thành công!');
+            //         setLowerBound(0);
+            //         setUpperBound(0);
+            //         addLog(text);
+            //         return ref.get();
+            //     });
         }
 
     }

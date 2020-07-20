@@ -6475,6 +6475,11 @@ source-map@^0.7.3:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
   integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
 
+sp-react-native-mqtt@^0.4.25:
+  version "0.4.25"
+  resolved "https://registry.yarnpkg.com/sp-react-native-mqtt/-/sp-react-native-mqtt-0.4.25.tgz#7cfdaf3a8629443702d820dd5dc899b7167c0468"
+  integrity sha512-cR1vF6esV92TdHCDrKDcDC7mAY7qAAENW5/4fyROmSqsnMm01PDdvFsad48u6KCy1FvpcooGldYMiTjFDTZihg==
+
 spdx-correct@^3.0.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/spdx-correct/-/spdx-correct-3.1.1.tgz#dece81ac9c1e6713e5f7d1b6f17d468fa53d89a9"
