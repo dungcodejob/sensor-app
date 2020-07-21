@@ -15,6 +15,7 @@ function SensorScreen({ navigation }) {
   const [sensorList, setSensorList] = useState([]);
   const refSensor = firestore().collection('HumidSensor');
   const refArea = firestore().collection('AreaPlant');
+  const refLog = firestore().collection('SensorLog').orderBy("Time");
   const [areaList, setAreaList] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -38,62 +39,61 @@ function SensorScreen({ navigation }) {
   const getSensor = async (index) => {
     var query = refSensor;
 
-    console.log(index);
-    if (index != 0) {
+
+    if (index != 0) { 
       query = query.where("AreaId", "==", areaList[index - 1].AreaId);
     }
-    setSensorList([]);
-    query.onSnapshot((querySnapshot) => {
-      var list = [];
-      querySnapshot.forEach(async doc => {
-        const { AreaId, status } = doc.data();
+    query.onSnapshot(async (querySnapshot) => {
+      const sList = [];
+      await querySnapshot.forEach(doc => {
+        const { AreaId, Name, status } = doc.data();
         // console.log(doc)
-
-        var datalist = []
-        var newref = firestore().collection('HumidSensor/' + doc.id + '/logHumid').orderBy("Time")
-        await newref.onSnapshot((querySnapshot) => {
-          querySnapshot.forEach(doc2 => {
-            const { Time, humid } = doc2.data();
-            datalist.push({
-              id: doc2.id,
-              Time,
-              humid
-            });
-          });
-
-        });
-
-        var loglist = []
-        var nextref = firestore().collection('SensorLog').orderBy("Time")
-        nextref.onSnapshot((querySnapshot) => {
-          querySnapshot.forEach(doc3 => {
-            const {Humid, SID, Temp, Time} = doc3.data();
-            if (SID === doc.id){
-              loglist.push({
-                id: doc3.id,
-                Time,
-                Humid,
-                Temp
-              })
-            } 
-          })
-        }
-        );
-
-        console.log(loglist)
-
-        list.push({
+        sList.push({
           id: doc.id,
           AreaId,
+          Name,
           status,
-          datalist,
-          loglist,
+          loglist: [],
         });
       });
 
-      setSensorList(list);
+      refLog.onSnapshot((querySnapshot) => {
+        const lList = [];
+        var newSensorList  = [];
+        querySnapshot.forEach(doc => {
+          const { SID, Humid, Temp, Time } = doc.data();
+          // console.log(doc)
+          lList.push({
+            id: doc.id,
+            SID,
+            Humid,
+            Temp,
+            Time: new Date(Time ? Time._seconds * 1000 : 0),
+          });
+        });
+
+        
+
+        sList.forEach(sensorItem => {
+          lList.forEach(logItem => {
+            if (sensorItem.id == logItem.SID) {
+              sensorItem.loglist.push(logItem);
+            }
+          });
+
+          newSensorList.push(sensorItem);
+        });
+
+
+
+        setSensorList(newSensorList);
+
+      });
+
     });
   }
+
+
 
   useEffect(() => {
     console.log("getArea");
@@ -117,65 +117,63 @@ function SensorScreen({ navigation }) {
 
   }, []);
 
-
   useEffect(() => {
-
-    refSensor.onSnapshot((querySnapshot) => {
-      var list = [];
-      querySnapshot.forEach(async doc => {
-        const { AreaId, status,Name } = doc.data();
+    refSensor.onSnapshot(async (querySnapshot) => {
+      const sList = [];
+      await querySnapshot.forEach(doc => {
+        const { AreaId, Name, status } = doc.data();
         // console.log(doc)
+        sList.push({
+          id: doc.id,
+          AreaId,
+          Name,
+          status,
+          loglist: [],
+        });
+      });
 
-        var datalist = []
-        var newref = firestore().collection('HumidSensor/' + doc.id + '/logHumid').orderBy("Time")
-        await newref.onSnapshot((querySnapshot) => {
-          querySnapshot.forEach(doc2 => {
-            const { Time, humid } = doc2.data();
-            datalist.push({
-              id: doc2.id,
-              Time,
-              humid
-            });
-
+      refLog.onSnapshot((querySnapshot) => {
+        const lList = [];
+        var newSensorList  = [];
+        querySnapshot.forEach(doc => {
+          const { SID, Humid, Temp, Time } = doc.data();
+          // console.log(doc)
+          lList.push({
+            id: doc.id,
+            SID,
+            Humid,
+            Temp,
+            Time: new Date(Time ? Time._seconds * 1000 : 0),
           });
         });
 
-        var loglist = []
-        var nextref = firestore().collection('SensorLog').orderBy("Time")
-        nextref.onSnapshot((querySnapshot) => {
-          querySnapshot.forEach(doc3 => {
-            const {Humid, SID, Temp, Time} = doc3.data();
-            if (SID === doc.id){
-              loglist.push({
-                id: doc3.id,
-                Time,
-                Humid,
-                Temp
-              })
-            } 
-          })
-        }
-        );
+        
 
-        list.push({
-          id: doc.id,
-          AreaId,
-          type: "sensor",
-          status,
-          Name,
-          datalist,
-          loglist,
+        sList.forEach(sensorItem => {
+          lList.forEach(logItem => {
+            if (sensorItem.id == logItem.SID) {
+              sensorItem.loglist.push(logItem);
+            }
+          });
+
+          newSensorList.push(sensorItem);
         });
 
+
+
+        setSensorList(newSensorList);
+
       });
-      setSensorList(list);
-      if (loading) {
-        setLoading(false);
-      }
+
     });
 
+    if (loading) {
+      setLoading(false);
+    }
 
   }, []);
+
+
 
 
   if (loading) {
@@ -188,7 +186,7 @@ function SensorScreen({ navigation }) {
   // const renderListView = () => {
   //   var animationDuration = 0;
   //   var i = 1000;
-    
+
   //   return (
   //     <FlatList
 
@@ -223,15 +221,15 @@ function SensorScreen({ navigation }) {
   //             }
   //           </View>
   //           </View>
-            
+
 
   //           <Text style={[{ fontSize: 16 },{marginTop:15}]}>
   //               {"Lần cập nhật cuối: " + (item.datalist.length > 0 ? 
   //                 (time.getDate()+'-'+ (time.getMonth() + 1)+'-'+time.getFullYear()+", ") + time.toLocaleTimeString() : '')}
   //               </Text>
-            
+
   //         </Animetable.View>
-          
+
   //       }
 
   //       }
@@ -242,7 +240,7 @@ function SensorScreen({ navigation }) {
   const renderListView = () => {
     var animationDuration = 0;
     var i = 1000;
-    
+
     return (
       <FlatList
 
@@ -251,42 +249,44 @@ function SensorScreen({ navigation }) {
         renderItem={({ item }) => {
           i -= 200;
           console.log(item)
-          var time = new Date(item.loglist.length > 0 && item.loglist[item.loglist.length - 1].Time ? item.loglist[item.loglist.length - 1].Time._seconds * 1000 : 0);
+          // var time = new Date(item.loglist.length > 0 && item.loglist[item.loglist.length - 1].Time ? item.loglist[item.loglist.length - 1].Time._seconds * 1000 : 0);
+          var time =item.loglist.length > 0 ?  item.loglist[item.loglist.length - 1].Time : null;
+
           return <Animetable.View
             animation="fadeInLeft"
             duration={animationDuration += i}
             style={styles.card}>
-            <View style={[{flexDirection: "row"},{display:"flex"},{justifyContent:"space-between"}]}>
-            <View>
-              <Text style={styles.card_title}>{item.Name}</Text>
-              <Text style={[{ fontSize: 16 },{marginTop:5}]}>{"Độ ẩm: " + (item.loglist.length > 0 ? item.loglist[item.loglist.length - 1].Humid + "%" : 'No value')}</Text>
-              <Text style={[{ fontSize: 16 },{marginTop:5}]}>{"Nhiệt độ: " + (item.loglist.length > 0 ? item.loglist[item.loglist.length - 1].Temp + "°C" : 'No value')}</Text>
-            </View>
-            <View>
-              <Text style={[{ color: "#7d8a9a" }, { marginRight: 5 }, { marginBottom: 10 }, { textAlign: "right" }]}>Trạng thái</Text>
-              {
-                item.status == true ? (
-                  <View style={[{ backgroundColor: "#67b373" }, styles.status_card]}>
-                    <Text style={styles.status_cardText}>HOẠT ĐỘNG</Text>
-                  </View>
-                ) : (
-                    <View style={[{ backgroundColor: "#f79229" }, styles.status_card]}>
-                      <Text style={styles.status_cardText}>KHÔNG HOẠT ĐỘNG</Text>
+            <View style={[{ flexDirection: "row" }, { display: "flex" }, { justifyContent: "space-between" }]}>
+              <View>
+                <Text style={styles.card_title}>{item.Name}</Text>
+                <Text style={[{ fontSize: 16 }, { marginTop: 5 }]}>{"Độ ẩm: " + (item.loglist.length > 0 ? item.loglist[item.loglist.length - 1].Humid + "%" : 'No value')}</Text>
+                <Text style={[{ fontSize: 16 }, { marginTop: 5 }]}>{"Nhiệt độ: " + (item.loglist.length > 0 ? item.loglist[item.loglist.length - 1].Temp + "°C" : 'No value')}</Text>
+              </View>
+              <View>
+                <Text style={[{ color: "#7d8a9a" }, { marginRight: 5 }, { marginBottom: 10 }, { textAlign: "right" }]}>Trạng thái</Text>
+                {
+                  item.status == true ? (
+                    <View style={[{ backgroundColor: "#67b373" }, styles.status_card]}>
+                      <Text style={styles.status_cardText}>HOẠT ĐỘNG</Text>
                     </View>
-                  )
+                  ) : (
+                      <View style={[{ backgroundColor: "#f79229" }, styles.status_card]}>
+                        <Text style={styles.status_cardText}>KHÔNG HOẠT ĐỘNG</Text>
+                      </View>
+                    )
 
-              }
+                }
+              </View>
             </View>
-            </View>
-            
 
-            <Text style={[{ fontSize: 16 },{marginTop:15}]}>
-                {"Lần cập nhật cuối: " + (item.loglist.length > 0 ? 
-                  (time.getDate()+'-'+ (time.getMonth() + 1)+'-'+time.getFullYear()+", ") + time.toLocaleTimeString() : '')}
-                </Text>
-            
+
+            <Text style={[{ fontSize: 16 }, { marginTop: 15 }]}>
+              {"Lần cập nhật cuối: " + (item.loglist.length > 0 ?
+                (time.getDate() + '-' + (time.getMonth() + 1) + '-' + time.getFullYear() + ", ") + time.toLocaleTimeString() : 'Chưa có dữ liệu')}
+            </Text>
+
           </Animetable.View>
-          
+
         }
 
         }

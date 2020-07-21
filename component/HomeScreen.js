@@ -1,7 +1,8 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from 'react';
+import { View,Alert, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import * as Animetable from "react-native-animatable";
+import firestore from '@react-native-firebase/firestore';
 
 
 
@@ -10,26 +11,34 @@ import * as Animetable from "react-native-animatable";
 
 function HomeScreen({ navigation }) {
 
+  const [mode, setMode] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const initialArr = [
     {
       title: 'Giới hạn độ ẩm',
       icon: 'thermometer',
-      address:'LimitHumid'
+      address: 'LimitHumid'
     },
     {
       title: 'Biểu đồ độ ẩm',
       icon: 'bar-chart-2',
-      address:'Chart',
+      address: 'Chart',
     },
     {
       title: 'Báo cáo hoạt động',
       icon: 'file-text',
-      address:'Log',
+      address: 'Log',
+    },
+    {
+      title: 'Báo cáo hoạt động',
+      icon: 'file-text',
+      address: 'Log',
     },
     {
       title: 'Thiết lập tài khoản',
       icon: 'settings',
-      address:'Setting',
+      address: 'Setting',
     },
   ];
 
@@ -44,34 +53,80 @@ function HomeScreen({ navigation }) {
       return (
         <Animetable.View animation="fadeInLeft" duration={buttonAnimationDuration} >
           <TouchableOpacity style={styles.card}
-        onPress={() =>  {
-          if(buttonInfo.address){
-            navigation.navigate(buttonInfo.address);
-          }
-        }}>
-          <View style={[{ flexDirection: 'row' }, { alignItems: 'center' }]}>
-            <Feather style={styles.card_icon} name={buttonInfo.icon} size={30} />
-            <Text style={styles.card_text}>
-              {buttonInfo.title}
-            </Text>
-          </View>
+            onPress={() => {
+              if (buttonInfo.address) {
+                navigation.navigate(buttonInfo.address);
+              }
+            }}>
+            <View style={[{ flexDirection: 'row' }, { alignItems: 'center' }]}>
+              <Feather style={styles.card_icon} name={buttonInfo.icon} size={30} />
+              <Text style={styles.card_text}>
+                {buttonInfo.title}
+              </Text>
+            </View>
 
-          <Feather style={[{ marginRight: 10 }]} name="chevron-right" size={20} />
+            <Feather style={[{ marginRight: 10 }]} name="chevron-right" size={20} />
 
-        </TouchableOpacity>
+          </TouchableOpacity>
         </Animetable.View>
-        
+
       );
-      
+
     });
   };
+
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('Automode')
+      .doc('Auto')
+      .onSnapshot(documentSnapshot => {
+        const { status } = documentSnapshot.data();
+
+        setMode(status);
+        if (loading) {
+          setLoading(false);
+        }
+      });
+
+
+
+  }, []);
+
+  const changeMode = () => {
+
+    var text = 'Chế độ tự động cập nhật: ' + (!mode ? 'bật' : 'tắt');
+    firestore().collection('Automode').doc('Auto')
+      .update({
+        status: !mode,
+      }).then(() => {
+        console.log('Cập nhật thành công!');
+        Alert.alert('Cập nhật thành công!');
+        setMode(!mode);
+        addLog(text);
+        return ref.get();
+      });
+  }
+
+  const addLog = (text) => {
+    firestore()
+      .collection('Log')
+      .add({
+        Time: firestore.FieldValue.serverTimestamp(),
+        Messages: text,
+      })
+      .then(() => {
+        console.log('log added!');
+      });
+  }
 
   return (
     <View style={styles.container}>
 
-      {/* <View style={styles.average}>
-        <Text style={styles.average_text}>Độ ẩm trung bình: 45</Text>
-      </View> */}
+      <View style={styles.average}>
+        <TouchableOpacity style={styles.average_form}   onPress={() => {changeMode()}}>
+        <Text style={styles.average_text}>Tự động cập nhật: {mode ? 'bật' : 'tắt'}</Text>
+        </TouchableOpacity>
+      </View>
 
       <View style={styles.list_group}>
         <View style={[{ flexDirection: 'row' }, { justifyContent: 'space-between' }]}>
@@ -83,9 +138,9 @@ function HomeScreen({ navigation }) {
             <Text style={styles.box_title}>Cảm biến độ ẩm</Text>
             {/* <Text style={styles.box_info}>Hoạt động: 3/5</Text> */}
 
-            <TouchableOpacity 
-             onPress={() => {navigation.navigate("Sensor")}}
-            style={styles.box_button}>
+            <TouchableOpacity
+              onPress={() => { navigation.navigate("Sensor") }}
+              style={styles.box_button}>
               <Text style={styles.box_button_text}>Xem Danh Sách</Text>
             </TouchableOpacity>
           </Animetable.View>
@@ -102,8 +157,8 @@ function HomeScreen({ navigation }) {
 
 
             <TouchableOpacity
-            onPress={() => {navigation.navigate("Device")}}
-             style={styles.box_button}>
+              onPress={() => { navigation.navigate("Device") }}
+              style={styles.box_button}>
               <Text style={styles.box_button_text}>Xem Danh Sách</Text>
             </TouchableOpacity>
 
@@ -117,7 +172,7 @@ function HomeScreen({ navigation }) {
         {
           renderButtons()
         }
-        
+
       </View>
     </View>
   );
@@ -136,14 +191,24 @@ var styles = StyleSheet.create({
     flex: 1,
     // backgroundColor:'#f5a942',
     paddingHorizontal: 20,
+    
+  },
+
+  average_form:{
+    backgroundColor: "#5db8fe",
+    marginTop:10,
+    paddingTop:10,
+    paddingBottom:10,
+    paddingLeft:10,
+    marginRight:150,
+    borderRadius:4,
   },
 
   average_text: {
-    paddingTop: 30,
+    fontSize: 20,
 
-    fontSize: 24,
-    fontWeight: 'bold',
-    // color:'#fff'
+
+    color:'#fff'
   },
 
   list_group: {

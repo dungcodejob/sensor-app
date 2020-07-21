@@ -7,7 +7,7 @@ import {
   StackedBarChart
 } from "react-native-chart-kit";
 import React, { useState, useEffect } from 'react';
-import { View, Text, Dimensions, StatusBar, StyleSheet, TextInput, Button, TouchableOpacity } from "react-native";
+import { View, Text, Dimensions, StatusBar, StyleSheet, TextInput,  TouchableOpacity } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import firestore from '@react-native-firebase/firestore';
 import ReactNativePickerModule from "react-native-picker-module"
@@ -21,7 +21,7 @@ function ChartScreen({ navigation }) {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [areaNameText, setAreaNameText] = useState([]);
 
-  const refLogHumid = firestore().collection('Consult_Humid_from_Sensor');
+  const refLogHumid = firestore().collection('SensorLog');
   const [logHumidList, setLogHumidList] = useState([]);
 
   const refSensor = firestore().collection('HumidSensor');
@@ -88,7 +88,7 @@ function ChartScreen({ navigation }) {
 
   useEffect(() => {
 
-    refSensor.onSnapshot(async (querySnapshot) => {
+    refLogHumid.onSnapshot(async (querySnapshot) => {
       var list = [];
       querySnapshot.forEach(doc => {
         const { SID, Time,Humid } = doc.data();

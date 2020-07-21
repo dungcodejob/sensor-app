@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import firestore from '@react-native-firebase/firestore';
 
-function LogScreen({ navigation }) {
+function DevicesLogScreen({ navigation }) {
 
   let pickerRef = null
   const [valueText, setValueText] = useState("Tất cả");
@@ -218,4 +218,4 @@ var styles = StyleSheet.create({
 
 });
 
-export default LogScreen
+export default DevicesLogScreen
