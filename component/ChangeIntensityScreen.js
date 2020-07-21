@@ -110,7 +110,7 @@ function ChangeIntensityScreen({ navigation, route }) {
             return;
         }
 
-        var mess_send = '[{"device_id":"' + device.id + '","values":["0","' + range + '"]}]'
+        var mess_send = '[{"device_id":"' + device.id + '","values":["1","' + range + '"]}]'
 
         /// Test mqtt
         console.log("MQTT Connect")
