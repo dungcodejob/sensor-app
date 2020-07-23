@@ -21,6 +21,7 @@ function ChartScreen({ navigation }) {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [areaNameText, setAreaNameText] = useState([]);
 
+
   const refLogHumid = firestore().collection('SensorLog');
   const [logHumidList, setLogHumidList] = useState([]);
 
@@ -31,6 +32,8 @@ function ChartScreen({ navigation }) {
   const [areaList, setAreaList] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [mode, setMode] = useState(0);
+
   const getNameArea = (list) => {
     const nameList = [];
     nameList.push("Tất cả")
@@ -39,6 +42,128 @@ function ChartScreen({ navigation }) {
     });
     setAreaNameText(nameList);
   }
+
+  const getLables = () => {
+    let lableString = [];
+    let lableNumber = [];
+    let day = new Date();
+    day.setDate(day.getDate() - 7);
+    if(mode == 0){
+      for (let index = 6; index >= 0; index--) {
+        day.setDate(day.getDate() + 1);
+        lableString.push(day.getDate() + '/' + (day.getMonth() + 1));
+        lableNumber.push(day.getDate());
+      }
+    }
+    return  {lableString, lableNumber};
+  }
+
+  const [lableList, setLableList] = useState(getLables().lableString);
+  const [dataChart, setDataChart] = useState([0,0,0,0,0,0,0]);
+
+
+  const getHumidOfDay = (humidList,day) => {
+    var humidSum = 0;
+    var length = 0;
+
+    humidList.forEach(element => {
+      if(element.Time.getDate() == day){
+        
+        humidSum += parseFloat(element.Humid);
+        length += 1;
+      }
+    });
+
+    if(length != 0){
+      return humidSum / length;
+    }
+
+    return 0;
+  }
+
+
+  const getSensor = (index) => {
+    var query = refSensor;
+
+
+    if (index != 0) { 
+      query = query.where("AreaId", "==", areaList[index - 1].AreaId);
+    }
+
+    query.onSnapshot(async (querySnapshot) => {
+      const sList = [];
+      await querySnapshot.forEach(doc => {
+        const { AreaId, Name, status } = doc.data();
+        // console.log(doc)
+        sList.push({
+          id: doc.id,
+          AreaId,
+          Name,
+          status,
+          loglist: [],
+        });
+      });
+
+      refLogHumid.onSnapshot((querySnapshot) => {
+        const lList = [];
+        var newSensorList  = [];
+        querySnapshot.forEach(doc => {
+          const { SID, Humid, Temp, Time } = doc.data();
+          // console.log(doc)
+          lList.push({
+            id: doc.id,
+            SID,
+            Humid,
+            Temp,
+            Time: new Date(Time ? Time._seconds * 1000 : 0),
+          });
+        });
+
+        
+
+        sList.forEach(sensorItem => {
+          lList.forEach(logItem => {
+            if (sensorItem.id == logItem.SID) {
+              sensorItem.loglist.push(logItem);
+            }
+          });
+
+          newSensorList.push(sensorItem);
+        });
+
+        var labels = getLables().lableNumber;
+        var data = [];
+        labels.forEach(element => {
+          var humidSum = 0;
+          var length = 0;
+          newSensorList.forEach(sensor => {
+
+  
+
+            humidSum += getHumidOfDay(sensor.loglist,element);
+            if(humidSum != 0){
+              length += 1;
+            }
+          });
+          
+          if(length == 0){
+            length = 1;
+          }
+
+          data.push(humidSum/length);
+          
+        });
+        
+
+        console.log(data);
+        setDataChart(data);
+        setSensorList(newSensorList);
+
+      });
+
+    });
+  }
+
 
   useEffect(() => {
 
@@ -63,78 +188,98 @@ function ChartScreen({ navigation }) {
 
   }, []);
 
-  useEffect(() => {
 
+  useEffect(() => {
     refSensor.onSnapshot(async (querySnapshot) => {
-      var list = [];
-      querySnapshot.forEach(doc => {
-        const { AreaId, status } = doc.data();
+      const sList = [];
+      await querySnapshot.forEach(doc => {
+        const { AreaId, Name, status } = doc.data();
         // console.log(doc)
-        list.push({
+        sList.push({
           id: doc.id,
           AreaId,
+          Name,
           status,
+          loglist: [],
         });
       });
 
-      setSensorList(list);
-    });
-
-    if (loading) {
-      setLoading(false);
-    }
-  }, []);
-
-
-  useEffect(() => {
-
-    refLogHumid.onSnapshot(async (querySnapshot) => {
-      var list = [];
-      querySnapshot.forEach(doc => {
-        const { SID, Time,Humid } = doc.data();
-        // console.log(doc)
-        list.push({
-          id: doc.id,
-          SID,
-          Humid,
-          Time: new Date(Time ? Time._seconds * 1000 : 0),
-
+      refLogHumid.onSnapshot((querySnapshot) => {
+        const lList = [];
+        var newSensorList  = [];
+        querySnapshot.forEach(doc => {
+          const { SID, Humid, Temp, Time } = doc.data();
+          // console.log(doc)
+          lList.push({
+            id: doc.id,
+            SID,
+            Humid,
+            Temp,
+            Time: new Date(Time ? Time._seconds * 1000 : 0),
+          });
         });
-      });
 
+        
 
-      setLogHumidList(list);
+        sList.forEach(sensorItem => {
+          lList.forEach(logItem => {
+            if (sensorItem.id == logItem.SID) {
+              sensorItem.loglist.push(logItem);
+            }
+          });
 
-      var sensorListV2 = sensorList;
-      sensorListV2.forEach(sensor => {
-        sensorListV2.logHumid = [];
-        list.forEach(humid => {
-          if(humid.SID == sensor.id){
-            sensorListV2.logHumid.push(humid);
+          newSensorList.push(sensorItem);
+        });
+
+        var labels = getLables().lableNumber;
+        var data = [];
+        labels.forEach(element => {
+          var humidSum = 0;
+          var length = 0;
+          newSensorList.forEach(sensor => {
+
+  
+
+            humidSum += getHumidOfDay(sensor.loglist,element);
+            if(humidSum != 0){
+              length += 1;
+            }
+          });
+          
+          if(length == 0){
+            length = 1;
           }
+
+          data.push(humidSum/length);
+
         });
+        
+
+        setDataChart(data);
+        setSensorList(newSensorList);
+
       });
 
-      setSensorList(sensorListV2);
     });
 
     if (loading) {
       setLoading(false);
     }
 
-
   }, []);
 
 
-  if (loading) {
+   
+
+  if(loading) {
     return null;
   }
 
   const line = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+    labels: lableList,
     datasets: [
       {
-        data: [20, 45, 28, 80, 99, 43],
+        data: dataChart,
         strokeWidth: 2, // optional
       },
     ],
@@ -191,13 +336,12 @@ function ChartScreen({ navigation }) {
         onCancel={() => {
           console.log("Cancelled")
         }}
-        onValueChange={(valueText, index) => {
+        onValueChange={(valueText,index) => {
           // console.log("value: ", valueText)
           // console.log("index: ", index)
           setValueText(valueText)
           setSelectedIndex(index)
-          console.log(sensorList)
-          // getDevices(index)
+          getSensor(index)
         }}
       />
 

@@ -259,8 +259,8 @@ function SensorScreen({ navigation }) {
             <View style={[{ flexDirection: "row" }, { display: "flex" }, { justifyContent: "space-between" }]}>
               <View>
                 <Text style={styles.card_title}>{item.Name}</Text>
-                <Text style={[{ fontSize: 16 }, { marginTop: 5 }]}>{"Độ ẩm: " + (item.loglist.length > 0 ? item.loglist[item.loglist.length - 1].Humid + "%" : 'No value')}</Text>
-                <Text style={[{ fontSize: 16 }, { marginTop: 5 }]}>{"Nhiệt độ: " + (item.loglist.length > 0 ? item.loglist[item.loglist.length - 1].Temp + "°C" : 'No value')}</Text>
+                <Text style={[{ fontSize: 16 }, { marginTop: 5 }]}>{"Độ ẩm: " + (item.loglist.length > 0 ?  Number(item.loglist[item.loglist.length - 1].Humid).toFixed(1) + "%" : 'No value')}</Text>
+                <Text style={[{ fontSize: 16 }, { marginTop: 5 }]}>{"Nhiệt độ: " + (item.loglist.length > 0 ? Number(item.loglist[item.loglist.length - 1].Temp).toFixed(1) + "°C" : 'No value')}</Text>
               </View>
               <View>
                 <Text style={[{ color: "#7d8a9a" }, { marginRight: 5 }, { marginBottom: 10 }, { textAlign: "right" }]}>Trạng thái</Text>

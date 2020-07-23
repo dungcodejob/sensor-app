@@ -31,11 +31,6 @@ function HomeScreen({ navigation }) {
       address: 'Log',
     },
     {
-      title: 'Báo cáo hoạt động',
-      icon: 'file-text',
-      address: 'Log',
-    },
-    {
       title: 'Thiết lập tài khoản',
       icon: 'settings',
       address: 'Setting',
