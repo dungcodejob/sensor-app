@@ -7,7 +7,7 @@ import {
   StackedBarChart
 } from "react-native-chart-kit";
 import React, { useState, useEffect } from 'react';
-import { View, Text, Dimensions, StatusBar, StyleSheet, TextInput,  TouchableOpacity } from "react-native";
+import { View, Text, Dimensions, StyleSheet,  TouchableOpacity } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import firestore from '@react-native-firebase/firestore';
 import ReactNativePickerModule from "react-native-picker-module"

@@ -13,6 +13,7 @@ import LimitHumidScreen from './component/LimitHumidScreen';
 import ControlScreen from './component/ControlScreen';
 import LogScreen from './component/LogScreen';
 import ChangeIntensityScreen from './component/ChangeIntensityScreen';
+import DevicesLogScreen from './component/DevicesLogScreen';
 
 
 
@@ -177,6 +178,20 @@ function RootStack() {
 
                 options={{
                     title: "Báo cáo hoạt động",
+                    headerTitleStyle: {
+                        paddingRight: 40,
+                        alignSelf: 'center'
+                    },
+                    ...TransitionPresets.SlideFromRightIOS,
+                }}
+            />
+
+            <Stack.Screen
+                name="DevicesLog"
+                component={DevicesLogScreen}
+
+                options={{
+                    title: "Nhật ký thiết bị",
                     headerTitleStyle: {
                         paddingRight: 40,
                         alignSelf: 'center'

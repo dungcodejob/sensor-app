@@ -31,6 +31,11 @@ function HomeScreen({ navigation }) {
       address: 'Log',
     },
     {
+      title: 'Nhật ký thiết bị',
+      icon: 'file-text',
+      address: 'DevicesLog',
+    },
+    {
       title: 'Thiết lập tài khoản',
       icon: 'settings',
       address: 'Setting',
@@ -210,6 +215,7 @@ var styles = StyleSheet.create({
     flex: 3,
     justifyContent: 'flex-end',
     paddingHorizontal: 20,
+    marginTop:20,
   },
 
   box: {
@@ -248,7 +254,7 @@ var styles = StyleSheet.create({
 
   box_button: {
     alignItems: 'center',
-    marginTop: 5,
+    marginTop: 4,
     borderColor: "#4dc2f8",
     borderWidth: 2,
     borderRadius: 5,
@@ -270,7 +276,7 @@ var styles = StyleSheet.create({
 
 
   menu: {
-    flex: 5,
+    flex: 6,
 
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -283,8 +289,8 @@ var styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     justifyContent: 'space-between',
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: 7,
+    marginTop: 7,
 
     flexDirection: 'row',
     // shadowColor: "#000",

@@ -128,7 +128,7 @@ function LogScreen({ navigation }) {
         return (
           <View style={[styles.item_log,]}>
             <Text style={styles.item_log_time}>
-              {item.Time.getHours() + ":" + item.Time.getMinutes()}
+            {(item.Time.getHours() < 10 ? '0' + item.Time.getHours() : item.Time.getHours()) + ":" + (item.Time.getMinutes() < 10 ? '0' + item.Time.getMinutes() : item.Time.getMinutes())}
             </Text>
             <Text style={styles.item_log_messages}>{item.Messages}</Text>
           </View>
@@ -158,8 +158,8 @@ function LogScreen({ navigation }) {
           return <View style={[styles.item]}>
             <View style={styles.title}>
             <Text style={styles.title_text}>
-              {getDayNameString(item.Time.getDay())}, {item.Time.getDate() + "-" + getMonthofDay(item.Time.getMonth())}
-            </Text>
+            {getDayNameString(item.Time.getDay())}, {(item.Time.getDate() < 10 ? '0' + item.Time.getDate() : item.Time.getDate()) + "-" + 
+              (getMonthofDay(item.Time.getMonth()) < 10 ? '0' + getMonthofDay(item.Time.getMonth()) : getMonthofDay(item.Time.getMonth()))}            </Text>
             </View>
             {
               renderLogView(item.List)

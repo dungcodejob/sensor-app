@@ -19,9 +19,9 @@ function DevicesLogScreen({ navigation }) {
 
   const [check_textInputChange, setCheck_textInputChange] = useState(false);
   const [logList, setLogList] = useState([]);
-  const ref = firestore().collection('Log').orderBy("Time");
+  const ref = firestore().collection('DevicesLog').orderBy("Time");
   const [loading, setLoading] = useState(true);
-
+  const refDevices = firestore().collection('Devices');
   const compareDate = (date1, date2) => {
     if (date1.getDay() != date2.getDay()) {
       return false;
@@ -36,59 +36,89 @@ function DevicesLogScreen({ navigation }) {
   }
 
   useEffect(() => {
-    ref.onSnapshot((querySnapshot) => {
-      var list = [];
-      querySnapshot.forEach(doc => {
-        const { Time, Messages } = doc.data();
+
+    refDevices.onSnapshot(async (querySnapshot) => {
+      const sList = [];
+      await querySnapshot.forEach(doc => {
+        const { AreaId, Name, status } = doc.data();
         // console.log(doc)
-
-
-        list.push({
+        sList.push({
           id: doc.id,
-          Time: new Date(Time ? Time._seconds * 1000 : 0),
-          Messages,
+          AreaId,
+          Name,
+          status,
         });
       });
 
+      ref.onSnapshot((querySnapshot) => {
+        var list = [];
+        querySnapshot.forEach(doc => {
+          const { Time, DID,Range } = doc.data();
+          // console.log(doc)
+  
 
-      // đảo ngược list
-      var oldList = []
-      for (let index = list.length - 1; index >= 0; index--) {
-        oldList.push(list[index]);
-      }
 
-      var formatList = [];
-      oldList.forEach(item1 => {
-        var check = false;
-        formatList.forEach(item2 => {
-          if (compareDate(item1.Time, item2.Time) == true) {
-            item2.List.push({
-              Time:item1.Time,
-              Messages:item1.Messages
-            });
-            check = true;
-          }
-        });
+          var name = '';
+          sList.forEach(element => {
+            if(element.id == DID){
+              name = element.Name;
+            }
 
-        if (check == false) {
-          formatList.push({
-            Time: item1.Time,
-            List: [{
-              Time:item1.Time,
-              Messages:item1.Messages
-            }],
           });
 
-
+          list.push({
+            id: doc.id,
+            Time: new Date(Time ? Time._seconds * 1000 : 0),
+            DID,
+            Range,
+            Name:name,
+          });
+        });
+  
+  
+        // đảo ngược list
+        var oldList = []
+        for (let index = list.length - 1; index >= 0; index--) {
+          oldList.push(list[index]);
+        }
+  
+        var formatList = [];
+        oldList.forEach(item1 => {
+          var check = false;
+          formatList.forEach(item2 => {
+            if (compareDate(item1.Time, item2.Time) == true) {
+              item2.List.push({
+                Time:item1.Time,
+                DID:item1.DID,
+                Range:item1.Range,
+                Name:item1.Name,
+              });
+              check = true;
+            }
+          });
+  
+          if (check == false) {
+            formatList.push({
+              Time: item1.Time,
+              List: [{
+                Time:item1.Time,
+                DID:item1.DID,
+                Range:item1.Range,
+                Name:item1.Name,
+              }],
+            });
+          }
+        });
+        console.log(formatList);
+  
+        setLogList(formatList);
+        if (loading) {
+          setLoading(false);
         }
       });
-      console.log(formatList);
 
-      setLogList(formatList);
-      if (loading) {
-        setLoading(false);
-      }
     });
+
 
 
   }, []);
@@ -128,9 +158,9 @@ function DevicesLogScreen({ navigation }) {
         return (
           <View style={[styles.item_log,]}>
             <Text style={styles.item_log_time}>
-              {item.Time.getHours() + ":" + item.Time.getMinutes()}
+              {(item.Time.getHours() < 10 ? '0' + item.Time.getHours() : item.Time.getHours()) + ":" + (item.Time.getMinutes() < 10 ? '0' + item.Time.getMinutes() : item.Time.getMinutes())}
             </Text>
-            <Text style={styles.item_log_messages}>{item.Messages}</Text>
+            <Text style={styles.item_log_messages}>{'Điều chỉnh cường độ của '+ item.Name + ' thành ' + item.Range}</Text>
           </View>
         )
       });
@@ -158,7 +188,8 @@ function DevicesLogScreen({ navigation }) {
           return <View style={[styles.item]}>
             <View style={styles.title}>
             <Text style={styles.title_text}>
-              {getDayNameString(item.Time.getDay())}, {item.Time.getDate() + "-" + getMonthofDay(item.Time.getMonth())}
+              {getDayNameString(item.Time.getDay())}, {(item.Time.getDate() < 10 ? '0' + item.Time.getDate() : item.Time.getDate()) + "-" + 
+              (getMonthofDay(item.Time.getMonth()) < 10 ? '0' + getMonthofDay(item.Time.getMonth()) : getMonthofDay(item.Time.getMonth()))}
             </Text>
             </View>
             {

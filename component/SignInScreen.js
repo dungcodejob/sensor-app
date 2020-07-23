@@ -43,44 +43,43 @@ function SignInScreen({ navigation }) {
   const signIn = async () => {
     console.log("Login button")
 
-    // if(email && password){
+    if(email && password){
       
-    //   try {
-    //     let response = await auth().signInWithEmailAndPassword(email, password)
-    //     if (response && response.user) {
-    //       console.log("Login successful")
-    //       console.log(auth().currentUser.email) // This will using for check User ID
-    //       navigation.navigate('Home')
-    //     }
-    //   } catch (e) {
-    //     console.log(e)
-    //     if (e.code === 'auth/email-already-in-use') {
-    //       console.log('That email address is already in use!');
-    //       Alert.alert('That email address is already in use!');
-    //     }
+      try {
+        let response = await auth().signInWithEmailAndPassword(email, password)
+        if (response && response.user) {
+          console.log("Login successful")
+          console.log(auth().currentUser.email) // This will using for check User ID
+          navigation.navigate('Home')
+        }
+      } catch (e) {
+        console.log(e)
+        if (e.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+          Alert.alert('That email address is already in use!');
+        }
 
-    //     if (e.code === 'auth/invalid-email') {
-    //       console.log('That email address is invalid!');
-    //       Alert.alert('That email address is invalid!');
-    //     }
+        if (e.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+          Alert.alert('That email address is invalid!');
+        }
 
-    //     if (e.code === 'auth/user-not-found') {
-    //       console.log('User not exist!');
-    //       Alert.alert('User not exist!');
-    //     }
+        if (e.code === 'auth/user-not-found') {
+          console.log('User not exist!');
+          Alert.alert('User not exist!');
+        }
 
-    //     if (e.code === 'auth/wrong-password') {
-    //       console.log('Wrong username or password!');
-    //       Alert.alert('Wrong username or password!');
-    //     }
+        if (e.code === 'auth/wrong-password') {
+          console.log('Wrong username or password!');
+          Alert.alert('Wrong username or password!');
+        }
         
-    //   }
-    // }
-    // else{
-    //   Alert.alert('email hoặc password không được phép để trống');
-    // }
+      }
+    }
+    else{
+      Alert.alert('email hoặc password không được phép để trống');
+    }
 
-    navigation.navigate('Home')
      
     
       
